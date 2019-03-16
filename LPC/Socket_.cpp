@@ -29,11 +29,18 @@ char* Socket_::getBuffer() { return buffer; }
 
 void Socket_::setError(const bool perror) { error = perror; }
 
+void Socket_::print_buffer() { std::cout << buffer << std::endl; }
+
 bool Socket_::recv_b()
 {
-	if ((recv(sock, buffer, sizeof(buffer), 0)) == 0)
+	char b[256] = { 0 };
+	if (!recv(sock, b, sizeof(b), 0))
+	{
+		std::cout << b << std::endl;
+		Sleep(300);
 		return 1;
-	else
+	}
+	else 
 		return 0;
 }
 bool Socket_::send_b(const char* pbuffer)

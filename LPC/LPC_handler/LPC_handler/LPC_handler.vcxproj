@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\connection.h" />
+    <ClInclude Include="..\..\script.hpp" />
     <ClInclude Include="..\..\Server.h" />
     <ClInclude Include="..\..\Socket_.h" />
     <ClInclude Include="pch.h" />

@@ -15,12 +15,15 @@ struct st_Client
 {
 	SOCKET sock;
 	sockaddr_in addr;
+	unsigned int number;
 };
 
 class Server : public Socket_
 {
 private:
-	SOCKET default_sock;
+	bool exit = 0;
+	st_Client default_client;
+	//SOCKET default_sock;
 	int port;
 	std::vector<st_Client> clients;
 
@@ -28,6 +31,9 @@ public:
 	
 	Server(const int pPort);
 	~Server();
+	std::vector<st_Client> getClients();
+	bool getExit();
 	bool acceptClient();
+	bool send_c();
 	bool send_b(const char* buffer);
 };

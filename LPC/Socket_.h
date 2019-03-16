@@ -24,6 +24,7 @@ public:
 	bool recv_b();
 	char* getBuffer();
 	bool getError();
+	void print_buffer();
 	SOCKET getSock();
 	void setSock(SOCKET psock);
 	void setError(const bool perror);

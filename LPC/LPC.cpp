@@ -18,8 +18,13 @@
 int main()
 {
 	const char addr[] = "127.0.0.1"; // ----------------- IP PORT
-	const unsigned short port = 9998;
-	Client cl(addr, port);
+	const unsigned short port = 9997;
+	Client client1(addr, port);
+	while (client1.getBuffer()!= "exit" || client1.getBuffer() != "EXIT")
+	{
+		client1.recv_b();
+		client1.print_buffer();
+	}
 
 	/*
 	// Socket Windows

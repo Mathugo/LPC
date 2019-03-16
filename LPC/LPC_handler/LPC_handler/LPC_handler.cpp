@@ -9,58 +9,41 @@
 #include <thread>
 #include <Windows.h>
 
+void recv_t(Server serv1)
+{
+	if (!serv1.getExit())
+	{
+		char buffer[256]{ 0 };
+		std::vector<st_Client> clients = serv1.getClients();
+		for (int i = 0; i < clients.size(); i++)
+		{
+			recv(clients[i].sock, buffer, sizeof(buffer), 0);
+			std::cout << "[*] Client " << clients[i].number << " : " << std::endl;
+
+		}
+		Sleep(200);
+	}
+}
+
 int main()
 {
-	const unsigned short port = 9998;
+	const unsigned short port = 9997;
 	Server serv1(port);
 	serv1.acceptClient();
+	serv1.send_b("COUCOU");
 
-	/*
-	// socket Windows
-	WSAData wsaData;
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+	std::thread t_recv(recv_t,serv1);
+	bool val = 1;
+	while (val)
 	{
-		std::cout << "Erreur initialisation WinSock : " << WSAGetLastError();
-		return -1;
+		val = serv1.send_c();
 	}
 
-	// Var
-	const unsigned short port = 9998;
-	SOCKET server = connection_server(port);
-	std::vector<Client> clients(25);
-	char buffer[] = "Hola";
-	bool exit = 0;
+//	std::thread t1_recv(t_recv, server);
+//	std::thread t1_send(t_send,clients[0].sock,&exit);
 
-	// STARTS OF THREADS 
-	std::thread t1_recv(t_recv, server);
-	std::thread t1_send(t_send,clients[0].sock,&exit);
+	
+	t_recv.join();
+	//t_send.join();
 
-	// Main Loop
-	while (!exit)
-	{
-		Client newClient;
-
-		if ((connection_server_accept(server, port, newClient)) == 1)
-		{
-			clients.push_back(newClient);
-		}
-		Sleep(0.2);
-
-	}
-
-	//  ------------------EXIT
-
-	std::cout << "[*] Cleanning up ..." << std::endl;
-	closesocket(server);
-	for (int i = 0; i < clients.size(); i++)	
-	{
-		closesocket(clients[i].sock);
-	}
-	WSACleanup();
-	std::cout << "[*] Done";
-
-	// Threads exit
-	t1_recv.join();
-	t1_send.join();
-	*/
 }

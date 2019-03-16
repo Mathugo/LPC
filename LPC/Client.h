@@ -10,7 +10,7 @@
 #include <fstream>
 #include "Socket_.h"
 
-class Client : Socket_
+class Client : public Socket_
 {
 public:
 	bool send_b(const char* buffer);

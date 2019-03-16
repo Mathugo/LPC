@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "Server.h"
 #pragma warning(disable:4996) 
-
-
+#include <thread>
+#include <mutex>
+#include <iostream>
+ 
 Server::Server(const int pPort) : port(pPort), Socket_()
 {
 	this->setSock(socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
@@ -33,7 +35,6 @@ Server::Server(const int pPort) : port(pPort), Socket_()
 
 	std::cout << "Server started on :  " << port << std::endl;
 }
-
 Server::~Server() 
 {
 	for (int i = 0; i < clients.size(); i++)
@@ -42,14 +43,26 @@ Server::~Server()
 	}
 }
 
+bool Server::send_c()
+{
+	char b[256] = { 0 };
+	std::cout << ">> ";
+	std::cin >> b;
+	if (!(strcmp(b, "exit")) || !(strcmp(b, "EXIT"))) 
+	{
+		exit = 1;
+		return 0;
+	}
+	else if (!(this->send_b(b))) { return 1; }
+	else { return 0; }
+}
 bool Server::send_b(const char* pbuffer)
 {
-	if(send(default_sock, pbuffer, sizeof(pbuffer), 0) == 0)
+	if(send(default_client.sock, pbuffer, sizeof(pbuffer), 0) == 0)
 		return 1;
 	else
 		return 0;
 }
-
 bool Server::acceptClient()
 {
 	st_Client NewClient;
@@ -69,8 +82,13 @@ bool Server::acceptClient()
 		NewClient.sock = newClient;
 		NewClient.addr = addr;
 		clients.push_back(NewClient);
-		if (clients.size() == 1) { default_sock = newClient; }
+		NewClient.number = clients.size();
+		if (clients.size() == 1) 
+		{
+			default_client = NewClient;
+		}
 		return 1;
+		
 	}
 	else
 	{
@@ -78,3 +96,6 @@ bool Server::acceptClient()
 		return 0;
 	}
 }
+
+std::vector<st_Client> Server::getClients(){return clients;}
+bool Server::getExit() { return exit; }

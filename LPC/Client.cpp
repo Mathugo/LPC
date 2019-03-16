@@ -17,7 +17,6 @@ Client::Client(const char* addr,const unsigned short port) : Socket_()
 
 	while (val != 0)
 	{
-
 		Sleep(1000);
 		if (val == INVALID_SOCKET)
 		{
@@ -28,6 +27,8 @@ Client::Client(const char* addr,const unsigned short port) : Socket_()
 		{
 			std::cout << "[*] Done" << std::endl;
 		}
+		val = connect(this->getSock(), (SOCKADDR *)&sin, sizeof(sin));
+
 	}
 }
 

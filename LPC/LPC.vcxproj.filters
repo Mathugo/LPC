@@ -44,8 +44,5 @@
     <ClCompile Include="Socket_.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LPC_handler\LPC_handler\LPC_handler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
