@@ -7,7 +7,6 @@
 #include <iostream>
 #include <winsock2.h>
 #include <WS2tcpip.h>
-#include "D:\ESIREM\C++\LPC\LPC\LPC\connection.h"
 #pragma comment(lib, "Ws2_32.lib")
 #define _WINSOCK_DEPRECATED_NO_WARNINGS 
 #define _WINSOCK_DEPCRECATED 
@@ -17,7 +16,7 @@
 
 int main()
 {
-	const char addr[] = "127.0.0.1"; // ----------------- IP PORT
+	const char addr[] = "127.0.0.1"; // -----'------------ IP PORT
 	const unsigned short port = 9997;
 	Client client1(addr, port);
 	while (client1.getBuffer()!= "exit" || client1.getBuffer() != "EXIT")

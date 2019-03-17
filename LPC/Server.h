@@ -23,7 +23,6 @@ class Server : public Socket_
 private:
 	bool exit = 0;
 	st_Client default_client;
-	//SOCKET default_sock;
 	int port;
 	std::vector<st_Client> clients;
 
@@ -31,9 +30,11 @@ public:
 	
 	Server(const int pPort);
 	~Server();
+	void compare(char* pbuffer);
 	std::vector<st_Client> getClients();
 	bool getExit();
 	bool acceptClient();
 	bool send_c();
-	bool send_b(const char* buffer);
+	bool send_b(const char* pbuffer);
+	bool recv_b();
 };

@@ -24,10 +24,7 @@
     <ClInclude Include="..\..\Socket_.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\connection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\script.hpp">
+    <ClInclude Include="Scripts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

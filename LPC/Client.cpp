@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Client.h"
 #pragma warning(disable:4996) 
-
+#define SIZE_BUFFER 256
 
 Client::Client(const char* addr,const unsigned short port) : Socket_()
 {
@@ -37,8 +37,26 @@ Client::~Client()
 
 bool Client::send_b(const char* pbuffer)
 {
-	if (send(this->getSock(), pbuffer, sizeof(pbuffer), 0) == 0)
+	if (send(this->getSock(), pbuffer, SIZE_BUFFER, 0) == 0)
 		return 1;
+	else
+		return 0;
+}
+
+void Client::compare(char* pbuffer)
+{
+	std::cout << "hello" << std::endl;
+}
+
+bool Client::recv_b()
+{
+	char b[SIZE_BUFFER] = { 0 };
+	if ((recv(this->getSock(), b, sizeof(b), 0) > 0))
+	{
+		this->setBuffer(b);
+		Sleep(300);
+		return 1;
+	}
 	else
 		return 0;
 }

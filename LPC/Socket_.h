@@ -13,21 +13,22 @@
 class Socket_
 {
 private:
+	char type_[256] = { 0 };
 	WSAData wsaData;
 	SOCKET sock;
 	bool error = 0;
 	char buffer[SIZE_BUFFER] = { 0 };
 
 public:
-
-	virtual bool send_b(const char* pbuffer)= 0;
-	bool recv_b();
 	char* getBuffer();
+	void setBuffer(const char* pbuffer);
 	bool getError();
 	void print_buffer();
 	SOCKET getSock();
 	void setSock(SOCKET psock);
 	void setError(const bool perror);
+	char* getType();
+	void setType(const char* type);
 	Socket_();
 	~Socket_();
 };

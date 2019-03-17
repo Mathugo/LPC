@@ -2,7 +2,6 @@
 #include <iostream>
 #include <winsock2.h>
 #include <WS2tcpip.h>
-#include "D:\ESIREM\C++\LPC\LPC\LPC\connection.h"
 #include "D:\ESIREM\C++\LPC\LPC\LPC\Server.h"
 #pragma comment(lib, "Ws2_32.lib")
 #include <vector>
@@ -30,7 +29,6 @@ int main()
 	const unsigned short port = 9997;
 	Server serv1(port);
 	serv1.acceptClient();
-	serv1.send_b("COUCOU");
 
 	std::thread t_recv(recv_t,serv1);
 	bool val = 1;
@@ -39,11 +37,7 @@ int main()
 		val = serv1.send_c();
 	}
 
-//	std::thread t1_recv(t_recv, server);
-//	std::thread t1_send(t_send,clients[0].sock,&exit);
 
-	
 	t_recv.join();
-	//t_send.join();
 
 }

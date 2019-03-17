@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Socket_.h"
 #pragma warning(disable:4996) 
-
+#define SIZE_BUFFER 256
 
 Socket_::Socket_()
 {
@@ -25,25 +25,18 @@ Socket_::~Socket_()
 void Socket_::setSock(SOCKET psock) { sock = psock; }
 SOCKET Socket_::getSock() { return sock; }
 bool Socket_::getError() { return error; }
-char* Socket_::getBuffer() { return buffer; }
-
 void Socket_::setError(const bool perror) { error = perror; }
-
-void Socket_::print_buffer() { std::cout << buffer << std::endl; }
-
-bool Socket_::recv_b()
+char* Socket_::getBuffer() { return buffer; }
+void Socket_::setBuffer(const char* pbuffer)
 {
-	char b[256] = { 0 };
-	if (!recv(sock, b, sizeof(b), 0))
+	for (int i = 0; i < SIZE_BUFFER; i++)
 	{
-		std::cout << b << std::endl;
-		Sleep(300);
-		return 1;
+		buffer[i] = pbuffer[i];
 	}
-	else 
-		return 0;
 }
-bool Socket_::send_b(const char* pbuffer)
-{
-	return 0;
-}
+void Socket_::print_buffer() { std::cout << buffer << std::endl; }
+char* Socket_::getType() { return type_; }
+void Socket_::setType(const char* ptype_) { strcpy(type_,ptype_); }
+
+
+

@@ -4,7 +4,8 @@
 #include <thread>
 #include <mutex>
 #include <iostream>
- 
+#include "D:\ESIREM\C++\LPC\LPC\LPC\LPC_handler\LPC_handler\Scripts.h"
+
 Server::Server(const int pPort) : port(pPort), Socket_()
 {
 	this->setSock(socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
@@ -45,6 +46,7 @@ Server::~Server()
 
 bool Server::send_c()
 {
+	
 	char b[256] = { 0 };
 	std::cout << ">> ";
 	std::cin >> b;
@@ -53,12 +55,16 @@ bool Server::send_c()
 		exit = 1;
 		return 0;
 	}
+	else if (strcmp(b, "help") == 0 || strcmp(b, "HELP") == 0)
+	{
+		print_help();
+	}
 	else if (!(this->send_b(b))) { return 1; }
 	else { return 0; }
 }
 bool Server::send_b(const char* pbuffer)
 {
-	if(send(default_client.sock, pbuffer, sizeof(pbuffer), 0) == 0)
+	if(send(default_client.sock, pbuffer, SIZE_BUFFER, 0) == 0)
 		return 1;
 	else
 		return 0;
@@ -99,3 +105,20 @@ bool Server::acceptClient()
 
 std::vector<st_Client> Server::getClients(){return clients;}
 bool Server::getExit() { return exit; }
+
+bool Server::recv_b()
+{
+	char b[SIZE_BUFFER] = { 0 };
+	if ((recv(this->getSock(), b, sizeof(b), 0) > 0))
+	{
+		this->setBuffer(b);
+		Sleep(300);
+		return 1;
+	}
+	else
+		return 0;
+}
+void Server::compare(char* pbuffer)
+{
+
+}

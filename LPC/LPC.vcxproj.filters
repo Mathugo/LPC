@@ -27,6 +27,9 @@
     <ClInclude Include="Socket_.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LPC_handler\LPC_handler\Scripts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
