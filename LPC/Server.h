@@ -8,14 +8,17 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
-#include <fstream>
+#include <fstream>	
 #include "Socket_.h"
 
 struct st_Client
 {
 	SOCKET sock;
-	sockaddr_in addr;
+	const char* addr;
 	unsigned int number;
+	char city[256];
+	char country[256];
+	char ip_extern[256];
 };
 
 class Server : public Socket_

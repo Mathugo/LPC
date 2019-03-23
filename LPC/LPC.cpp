@@ -19,48 +19,14 @@ int main()
 	const char addr[] = "127.0.0.1"; // -----'------------ IP PORT
 	const unsigned short port = 9997;
 	Client client1(addr, port);
-	while (client1.getBuffer()!= "exit" || client1.getBuffer() != "EXIT")
+
+	while (client1.getBuffer() != "exit" || client1.getBuffer() != "EXIT")
 	{
 		client1.recv_b();
 		client1.print_buffer();
 	}
 
-	/*
-	// Socket Windows
-	WSAData wsaData;
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-	{	
-		std::cout << "Erreur initialisation WinSock : " << WSAGetLastError();
-		return -1;
-	}
-
-	// Var
-	char buffer[256] = { 0 };
-	const char* addr = "127.0.0.1"; // ----------------- IP PORT
-	const unsigned short port = 9998;
-	SOCKET sock;
-	int val;
-	val = connection_client(sock, port, addr);
-
-	while (!val)
-	{
-		val = connection_client(sock, port, addr);
-	}
-
-	//Main Loop
-	while (strcmp(buffer,"exit") != 0 )
-	{
-		if (!(recv(sock, buffer, sizeof(buffer), 0)))
-		{
-			std::cout << "[*] Server : " << buffer << std::endl;
-		}
-	}
-
-	// EXIT
-	std::cout << "[*] Cleanning up ..." << std::endl;
-	closesocket(sock);
-	WSACleanup();
-	std::cout << "[*] Done";
-	*/
 }
+
+
 

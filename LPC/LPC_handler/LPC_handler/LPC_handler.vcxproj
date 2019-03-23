@@ -151,12 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Scripts_s.h" />
     <ClInclude Include="..\..\Server.h" />
     <ClInclude Include="..\..\Socket_.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Scripts.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Scripts_s.cpp" />
     <ClCompile Include="..\..\Server.cpp" />
     <ClCompile Include="..\..\Socket_.cpp" />
     <ClCompile Include="LPC_handler.cpp" />

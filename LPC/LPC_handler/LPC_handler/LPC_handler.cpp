@@ -37,7 +37,6 @@ int main()
 		val = serv1.send_c();
 	}
 
-
 	t_recv.join();
 
 }

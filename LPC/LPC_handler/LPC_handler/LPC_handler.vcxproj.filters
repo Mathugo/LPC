@@ -18,13 +18,13 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Socket_.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts.h">
+    <ClInclude Include="..\..\Server.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripts_s.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,10 +35,13 @@
     <ClCompile Include="LPC_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Socket_.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Socket_.cpp">
+    <ClCompile Include="..\..\Scripts_s.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -16,7 +16,7 @@ public:
 	void compare(char* pbuffer);
 	bool recv_b();
 	bool send_b(const char* buffer);
-	Client(const char* addr, const unsigned short port);
+	Client(const char* addr, const unsigned short &port);
 	~Client();
 	
 };

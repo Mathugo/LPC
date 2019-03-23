@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Scripts">
+      <UniqueIdentifier>{af6cde7b-c6de-4a9f-94e6-d5aa1c95ad5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts">
+      <UniqueIdentifier>{ca436e28-2300-47a1-815b-5a0fd8ad0664}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -27,8 +33,20 @@
     <ClInclude Include="Socket_.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LPC_handler\LPC_handler\Scripts.h">
+    <ClInclude Include="chilkat-9.5.0-x86_64-vc2017\include\CkRest.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="chilkat-9.5.0-x86_64-vc2017\include\CkJsonObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts_s.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts_all.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts_c.h">
+      <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

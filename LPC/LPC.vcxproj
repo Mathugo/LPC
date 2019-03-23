@@ -152,9 +152,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="chilkat-9.5.0-x86_64-vc2017\include\CkJsonObject.h" />
+    <ClInclude Include="chilkat-9.5.0-x86_64-vc2017\include\CkRest.h" />
     <ClInclude Include="Client.h" />
-    <ClInclude Include="LPC_handler\LPC_handler\Scripts.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Scripts_all.h" />
+    <ClInclude Include="Scripts_c.h" />
+    <ClInclude Include="Scripts_s.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="Socket_.h" />
   </ItemGroup>

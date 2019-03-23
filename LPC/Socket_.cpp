@@ -12,7 +12,6 @@ Socket_::Socket_()
 	}
 }
 
-
 Socket_::~Socket_()
 {
 	std::cout << "Cleanning up ..." << std::endl;
@@ -23,9 +22,9 @@ Socket_::~Socket_()
 }
 
 void Socket_::setSock(SOCKET psock) { sock = psock; }
-SOCKET Socket_::getSock() { return sock; }
-bool Socket_::getError() { return error; }
-void Socket_::setError(const bool perror) { error = perror; }
+SOCKET Socket_::getSock() const { return sock; }
+bool Socket_::getError() const{ return error; }
+void Socket_::setError(const bool &perror) { error = perror; }
 char* Socket_::getBuffer() { return buffer; }
 void Socket_::setBuffer(const char* pbuffer)
 {

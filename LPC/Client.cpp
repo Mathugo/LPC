@@ -2,9 +2,11 @@
 #include "Client.h"
 #pragma warning(disable:4996) 
 #define SIZE_BUFFER 256
+//#include "LPC_handler\LPC_handler\Scripts.h"
 
-Client::Client(const char* addr,const unsigned short port) : Socket_()
+Client::Client(const char* addr,const unsigned short &port) : Socket_()
 {
+	
 	SOCKADDR_IN sin;
 	int val;
 	this->setSock(socket(AF_INET, SOCK_STREAM, 0));
@@ -46,6 +48,32 @@ bool Client::send_b(const char* pbuffer)
 void Client::compare(char* pbuffer)
 {
 	std::cout << "hello" << std::endl;
+	/*
+	if (!(strcmp(pbuffer, "ls")))
+	{
+	std::cout << "LS" << std::endl;
+	ls(this->getSock());
+	}
+	else if (!(strcmp(pbuffer, "cd")))
+	{
+	cd(this->getSock(), pbuffer);
+	}
+	else if (!(strcmp(pbuffer, "pwd")))
+	{
+	pwd(this->getSock());
+	}
+	else if (!(strcmp(pbuffer,"upload")))
+	{
+	upload_c(this);
+	}
+	else
+	{
+	SetColor(6);
+	std::cout << "[*] " << pbuffer << std::endl;
+	SetColor(7);
+	Sleep(0.1);
+	}
+	*/
 }
 
 bool Client::recv_b()
@@ -54,6 +82,7 @@ bool Client::recv_b()
 	if ((recv(this->getSock(), b, sizeof(b), 0) > 0))
 	{
 		this->setBuffer(b);
+		compare(b);
 		Sleep(300);
 		return 1;
 	}

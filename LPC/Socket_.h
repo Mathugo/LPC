@@ -21,14 +21,16 @@ private:
 
 public:
 	char* getBuffer();
-	void setBuffer(const char* pbuffer);
-	bool getError();
-	void print_buffer();
-	SOCKET getSock();
-	void setSock(SOCKET psock);
-	void setError(const bool perror);
+	SOCKET getSock() const;
 	char* getType();
+	bool getError() const;
+
+	void setBuffer(const char* pbuffer);
+	void setSock(SOCKET psock);
+	void setError(const bool &perror);
 	void setType(const char* type);
+	void print_buffer();
+
 	Socket_();
 	~Socket_();
 };
