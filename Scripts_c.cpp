@@ -1,15 +1,9 @@
 #pragma once
-#include <Windows.h>
+#include "Scripts_c.h"
+#include "Scripts_all.h"
 #include <iostream>
-#include "Client.h"
-#include "Server.h"
+#include "pch.h"
 
-/*char* return_command(char* command);
-void cd(SOCKET sock, char* directory);
-void pwd(SOCKET sock);
-void ls(SOCKET sock);
-bool upload_c(Client &client);
-*/
 
 /*
 

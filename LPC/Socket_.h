@@ -13,6 +13,7 @@
 class Socket_
 {
 private:
+
 	char type_[256] = { 0 };
 	WSAData wsaData;
 	SOCKET sock;
@@ -20,6 +21,7 @@ private:
 	char buffer[SIZE_BUFFER] = { 0 };
 
 public:
+
 	char* getBuffer();
 	SOCKET getSock() const;
 	char* getType();

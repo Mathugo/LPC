@@ -14,11 +14,11 @@
 struct st_Client
 {
 	SOCKET sock;
-	const char* addr;
+	std::string addr;
 	unsigned int number;
-	char city[256];
-	char country[256];
-	char ip_extern[256];
+	std::string city;
+	std::string country;
+	std::string ip_extern;
 };
 
 class Server : public Socket_
@@ -33,11 +33,13 @@ public:
 	
 	Server(const int pPort);
 	~Server();
-	void compare(char* pbuffer);
 	std::vector<st_Client> getClients();
+	void setDefaultClient(st_Client _default);
 	bool getExit();
 	bool acceptClient();
 	bool send_c();
 	bool send_b(const char* pbuffer);
+	bool send_b(const int &pbuffer);
+
 	bool recv_b();
 };

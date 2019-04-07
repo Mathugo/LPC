@@ -171,6 +171,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Scripts_all.cpp" />
+    <ClCompile Include="Scripts_c.cpp" />
+    <ClCompile Include="Scripts_s.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Socket_.cpp" />
   </ItemGroup>

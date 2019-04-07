@@ -2,7 +2,6 @@
 #include "Client.h"
 #pragma warning(disable:4996) 
 #define SIZE_BUFFER 256
-//#include "LPC_handler\LPC_handler\Scripts.h"
 
 Client::Client(const char* addr,const unsigned short &port) : Socket_()
 {
@@ -32,8 +31,16 @@ Client::Client(const char* addr,const unsigned short &port) : Socket_()
 		val = connect(this->getSock(), (SOCKADDR *)&sin, sizeof(sin));
 
 	}
+	init();
+
 }
 
+bool Client::init()
+{
+	setIp(Auto::get_ip());
+	send_b(getIp().c_str());
+	return 1;
+}
 Client::~Client()
 {}
 
@@ -48,6 +55,7 @@ bool Client::send_b(const char* pbuffer)
 void Client::compare(char* pbuffer)
 {
 	std::cout << "hello" << std::endl;
+	
 	/*
 	if (!(strcmp(pbuffer, "ls")))
 	{
@@ -89,3 +97,5 @@ bool Client::recv_b()
 	else
 		return 0;
 }
+void Client::setIp(const std::string& pIp) { Ip = pIp; }
+std::string Client::getIp() const { return Ip; }

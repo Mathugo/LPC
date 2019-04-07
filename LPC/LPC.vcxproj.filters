@@ -39,13 +39,13 @@
     <ClInclude Include="chilkat-9.5.0-x86_64-vc2017\include\CkJsonObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts_s.h">
-      <Filter>Header Files\Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts_all.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scripts_c.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts_s.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
@@ -64,6 +64,15 @@
     </ClCompile>
     <ClCompile Include="Socket_.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts_all.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts_c.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts_s.cpp">
+      <Filter>Source Files\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include <iostream>
+#include "chilkat-9.5.0-x86_64-vc2017\include\CkRest.h"
+#include "chilkat-9.5.0-x86_64-vc2017\include\CkJsonObject.h"
 #include "Client.h"
 #include "Server.h"
 
