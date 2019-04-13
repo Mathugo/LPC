@@ -1,4 +1,4 @@
-#include "pch.h"
+//#include "pch.h"
 #include "Scripts_s.h"
 
 
@@ -17,6 +17,7 @@ void Info::list_scripts()
 	std::cout << "[ default name is Windows_Update" << std::endl;
 	std::cout << "[ persistence <file_name> <keyname>\t: Put a persistence on a given file" << std::endl;
 	std::cout << "[ default keyname is Windows_Update" << std::endl;
+	std::cout << "[ shell <command>\t\t\t: Run a shell command" << std::endl;
 	SetColor(14);
 	std::cout << "#---------------------------- Exploit ---------------------------#" << std::endl;
 	SetColor(6);
@@ -40,10 +41,10 @@ void Info::print_help()
 	std::cout << "[ list_scripts\t\t: List all scripts available" << std::endl;
 	std::cout << "[ version\t\t: print the current version and changes" << std::endl;
 	std::cout << "[ getsysinfo\t\t: Give information about the current session (user ...)" << std::endl;
+	std::cout << "[ getip\t\t\t: Give the External IP address of the current session" << std::endl;
 	std::cout << "[ set_session\t\t: Switch to an another session" << std::endl;
 	std::cout << "[ list\t\t\t: list all actives sessions" << std::endl;
 	std::cout << "[ pwd\t\t\t: print the trojan emplacement" << std::endl;
-	std::cout << "[ cd \"directory..\"\t: change directory" << std::endl;
 	std::cout << "[ ls\t\t\t: see all files at the current directory" << std::endl;
 	std::cout << "[ exit\t\t\t: exit the program" << std::endl;
 	SetColor(7);

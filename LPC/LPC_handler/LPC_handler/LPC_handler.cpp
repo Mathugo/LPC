@@ -1,4 +1,3 @@
-#include "pch.h"
 #include <iostream>
 #include <winsock2.h>
 #include <WS2tcpip.h>
@@ -7,6 +6,7 @@
 #include <vector>
 #include <thread>
 #include <Windows.h>
+#include "Animations.h"
 
 void recv_t(Server* serv1)	
 {
@@ -56,13 +56,16 @@ void send_t(Server* serv1)
 		val = serv1->send_c();
 	}
 }
+
 int main()
 {
 	const unsigned short port = 9997;
 	std::vector<std::thread> thread_list;
 	//int nb = 0;
+	SetColor(14);
 	Server* serv1 = new Server(port);
 	//Server serv1(port);
+	SetColor(2);
 	serv1->acceptClient();
 	std::cout << "[*] Starting thread ..." << std::endl;
 	//thread_list.push_back(std::thread(listen_client,serv1,nb));
@@ -72,12 +75,20 @@ int main()
 
 	std::thread t_accept(accept_t, serv1);
 	std::thread t_recv(recv_t,serv1);
+	std::cout << std::endl;
 	std::cout << "[*] Done" << std::endl;
+	Sleep(2000);
+	system("cls");
+	Animations::Welcome();
+
 	bool val = 1;
 	
 	while (val)
 	{
+		SetColor(4);
 		val = serv1->send_c();
+		SetColor(7);
+		Sleep(500);
 	}
 	bool test = 1;
 	/*
@@ -98,13 +109,11 @@ int main()
 	//t_send.join();
 	
 	
-	t_accept.join();
 	/*for (int i = 0; i < thread_list.size(); i++)
 	{
 		thread_list[i].join();
 	}
 	*/
-	t_recv.join();
 	delete serv1;
 	std::cout << "[*] Done" << std::endl;
 }

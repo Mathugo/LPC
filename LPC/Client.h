@@ -10,6 +10,7 @@
 #include <fstream>
 #include "Socket_.h"
 #include "Scripts_all.h"
+#include "Factory_Client.h"
 
 class Client : public Socket_
 {
@@ -20,7 +21,6 @@ public:
 	void setIp(const std::string& pIp);
 	std::string getIp() const;
 
-	void compare(char* pbuffer);
 	bool recv_b();
 	bool send_b(const char* buffer);
 	bool init();
