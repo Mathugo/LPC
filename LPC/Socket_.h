@@ -17,18 +17,19 @@ private:
 	char type_[256] = { 0 };
 	WSAData wsaData;
 	SOCKET sock;
+	SOCKET* sock_ = &sock;
 	bool error = 0;
 	char buffer[SIZE_BUFFER] = { 0 };
 
 public:
 
 	char* getBuffer();
-	SOCKET getSock() const;
+	SOCKET* getSock() const;
 	char* getType();
 	bool getError() const;
 
 	void setBuffer(const char* pbuffer);
-	void setSock(SOCKET psock);
+	void setSock(const SOCKET& psock);
 	void setError(const bool &perror);
 	void setType(const char* type);
 	void print_buffer();

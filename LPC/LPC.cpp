@@ -20,10 +20,10 @@ int main()
 	const unsigned short port = 9997;
 	Client client1(addr, port);
 
-	while (client1.getBuffer() != "exit" || client1.getBuffer() != "EXIT")
+	while (strcmp(client1.getBuffer(), "exit") != 0)
 	{
 		client1.recv_b();
-		client1.print_buffer();
+		client1.print_buffer();		
 	}
 
 }

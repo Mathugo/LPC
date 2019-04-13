@@ -21,8 +21,8 @@ Socket_::~Socket_()
 	std::cout << "[*] DONE" << std::endl;
 }
 
-void Socket_::setSock(SOCKET psock) { sock = psock; }
-SOCKET Socket_::getSock() const { return sock; }
+void Socket_::setSock(const SOCKET& psock) { sock = psock; }
+SOCKET* Socket_::getSock() const { return sock_; }
 bool Socket_::getError() const{ return error; }
 void Socket_::setError(const bool &perror) { error = perror; }
 char* Socket_::getBuffer() { return buffer; }

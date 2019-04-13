@@ -15,19 +15,19 @@ Server::Server(const int pPort) : port(pPort), Socket_()
 	addr.sin_family = AF_INET;
 
 	
-	if (this->getSock() == INVALID_SOCKET)
+	if (*(this->getSock()) == INVALID_SOCKET)
 	{
 		std::cout << "Erreur initialisation socket : " << WSAGetLastError();
 		this->setError(1);
 	}
 	
-	int res = bind(this->getSock(), (sockaddr*)&addr, sizeof(addr));
+	int res = bind(*this->getSock(), (sockaddr*)&addr, sizeof(addr));
 	if (res != 0)
 	{
 		std::cout << "Error bind : " << WSAGetLastError();
 		this->setError(1);
 	}
-	res = listen(this->getSock(), SOMAXCONN);
+	res = listen(*this->getSock(), SOMAXCONN);
 	if (res != 0)
 	{
 		std::cout << "Error listen : " << WSAGetLastError();
@@ -49,7 +49,8 @@ bool Server::send_c()
 	
 	char b[256] = { 0 };
 	std::cout << ">> ";
-	std::cin >> b;
+	std::cin.getline(b, sizeof(b));	
+
 	if (!(strcmp(b, "exit")) || !(strcmp(b, "EXIT"))) 
 	{
 		exit = 1;
@@ -103,7 +104,7 @@ bool Server::acceptClient()
 	addr.sin_family = AF_INET;
 	sockaddr_in from = { 0 };
 	socklen_t addrlen = sizeof(addr);
-	SOCKET newClient = accept(this->getSock(), (SOCKADDR*)(&from), &addrlen);
+	SOCKET newClient = accept(*this->getSock(), (SOCKADDR*)(&from), &addrlen);
 
 	if (newClient != INVALID_SOCKET)
 	{
@@ -129,7 +130,7 @@ bool Server::acceptClient()
 	}
 	else
 	{
-		std::cout << "Error .." << std::endl;
+		//std::cout << "Error .." << std::endl;
 		return 0;
 	}
 }
@@ -144,7 +145,7 @@ void Server::setDefaultClient(st_Client _default)
 bool Server::recv_b()
 {
 	char b[SIZE_BUFFER] = { 0 };
-	if ((recv(this->getSock(), b, sizeof(b), 0) > 0))
+	if ((recv(*this->getSock(), b, sizeof(b), 0) >= 0))
 	{
 		this->setBuffer(b);
 		Sleep(300);
