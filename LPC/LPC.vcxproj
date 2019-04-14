@@ -154,11 +154,8 @@
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="Factory_Client.h" />
-    <ClInclude Include="LPC_handler\LPC_handler\Animations.h" />
     <ClInclude Include="Scripts_all.h" />
     <ClInclude Include="Scripts_c.h" />
-    <ClInclude Include="Scripts_s.h" />
-    <ClInclude Include="Server.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="Socket_.h" />
   </ItemGroup>
@@ -166,11 +163,8 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Factory_Client.cpp" />
     <ClCompile Include="LPC.cpp" />
-    <ClCompile Include="LPC_handler\LPC_handler\Animations.cpp" />
     <ClCompile Include="Scripts_all.cpp" />
     <ClCompile Include="Scripts_c.cpp" />
-    <ClCompile Include="Scripts_s.cpp" />
-    <ClCompile Include="Server.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="Socket_.cpp" />
   </ItemGroup>

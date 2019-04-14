@@ -4,7 +4,6 @@
 #include <locale>
 #include <sstream>
 
-void SetColor(int value);
 
 class Auto
 {

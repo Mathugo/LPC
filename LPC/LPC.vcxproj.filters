@@ -1,96 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{59ba8b8b-60c9-4b8c-9973-41f28390a8cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Scripts">
-      <UniqueIdentifier>{af6cde7b-c6de-4a9f-94e6-d5aa1c95ad5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scripts">
-      <UniqueIdentifier>{ca436e28-2300-47a1-815b-5a0fd8ad0664}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Client">
-      <UniqueIdentifier>{3ab734a7-831d-49c9-856b-0401acf9ab03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Server">
-      <UniqueIdentifier>{8c7220ec-c7da-4bf9-807c-7d73e9185df2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Client\Scripts Client">
-      <UniqueIdentifier>{337b3a2a-c321-49b5-a2ff-43b95f439594}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Server\Scripts_Server">
-      <UniqueIdentifier>{48008272-3f88-458b-9f45-1649fbc4a537}</UniqueIdentifier>
+    <Filter Include="Socket">
+      <UniqueIdentifier>{45a47469-0148-4c4a-9818-d6faa672bdd5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Socket_.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="Factory_Client.h" />
     <ClInclude Include="Scripts_all.h">
-      <Filter>Header Files\Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Shell.h">
-      <Filter>Client\Scripts Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Client.h">
-      <Filter>Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Factory_Client.h">
-      <Filter>Client</Filter>
+      <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scripts_c.h">
-      <Filter>Client\Scripts Client</Filter>
+      <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Server.h">
-      <Filter>Server</Filter>
+    <ClInclude Include="Shell.h">
+      <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts_s.h">
-      <Filter>Server\Scripts_Server</Filter>
+    <ClInclude Include="Socket_.h">
+      <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="LPC_handler\LPC_handler\Animations.h">
-      <Filter>Server\Scripts_Server</Filter>
+    <ClInclude Include="Client.h">
+      <Filter>Socket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Socket_.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts_all.cpp">
-      <Filter>Source Files\Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Shell.cpp">
-      <Filter>Client\Scripts Client</Filter>
-    </ClCompile>
-    <ClCompile Include="Factory_Client.cpp">
-      <Filter>Client</Filter>
-    </ClCompile>
-    <ClCompile Include="Client.cpp">
-      <Filter>Client</Filter>
-    </ClCompile>
-    <ClCompile Include="LPC.cpp">
-      <Filter>Client</Filter>
+      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts_c.cpp">
-      <Filter>Client\Scripts Client</Filter>
+      <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Server.cpp">
-      <Filter>Server</Filter>
+    <ClCompile Include="Shell.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts_s.cpp">
-      <Filter>Server\Scripts_Server</Filter>
+    <ClCompile Include="Factory_Client.cpp" />
+    <ClCompile Include="LPC.cpp" />
+    <ClCompile Include="Socket_.cpp">
+      <Filter>Socket</Filter>
     </ClCompile>
-    <ClCompile Include="LPC_handler\LPC_handler\Animations.cpp">
-      <Filter>Server\Scripts_Server</Filter>
+    <ClCompile Include="Client.cpp">
+      <Filter>Socket</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

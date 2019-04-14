@@ -1,4 +1,3 @@
-//#include "pch.h"
 #include "Client.h"
 #pragma warning(disable:4996) 
 #define SIZE_BUFFER 256
