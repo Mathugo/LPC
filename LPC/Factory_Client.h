@@ -1,16 +1,18 @@
 #pragma once
 #include "Client.h"
 #include "Shell.h"
+#include "Scripts_c.h"
 #define BUFFER_LEN 256
+class Client;
 
 class Factory_Client
 {
 private:
 	std::vector<std::string> args;
 	const std::string buffer;
-	SOCKET* sock;
+	Client* client = NULL;
 public:
-	Factory_Client(SOCKET* client, const char* pbuffer);
+	Factory_Client(Client* client, const char* pbuffer);
 	void arg_self_persistence();
 
 };

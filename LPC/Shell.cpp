@@ -36,8 +36,13 @@ void Shell::ls(SOCKET* client)
 	std::string ret = return_command("dir /b");
 	send(*client,("\n"+ret).c_str(),BUFFER_LEN,0);
 }
-void Shell::run(SOCKET* client,const std::string cmd)
+void Shell::run(SOCKET* client,const std::vector<std::string> args)
 {
+	std::string cmd;
+	for (int iargs = 1; iargs < args.size(); iargs++)
+	{
+		cmd=cmd+args[iargs]+" ";
+	}
 	std::string ret = return_command(cmd).c_str();
 	send(*client, ret.c_str(), sizeof(ret), 0);
 }

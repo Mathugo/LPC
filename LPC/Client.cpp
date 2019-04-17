@@ -71,7 +71,7 @@ bool Client::recv_b()
 	if ((recv(*(this->getSock()), b, sizeof(b), 0) > 0))
 	{
 		this->setBuffer(b);
-		Factory_Client fact(this->getSock(), b);
+		Factory_Client fact(this, b);
 		Sleep(300);
 		return 1;
 	}

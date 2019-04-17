@@ -2,7 +2,6 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS 
 #define _WINSOCK_DEPCRECATED 
 #pragma warning(disable:4996) 
-#include "pch.h"
 #include <iostream>
 #include <winsock2.h>
 #include <WS2tcpip.h>
@@ -17,6 +16,7 @@ int main()
 {
 	const char addr[] = "127.0.0.1"; // -----'------------ IP PORT
 	const unsigned short port = 9997;
+	
 	Client client1(addr, port);
 
 	while (strcmp(client1.getBuffer(), "exit") != 0)
