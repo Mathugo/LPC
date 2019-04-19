@@ -8,5 +8,5 @@ put persistence, get external IP, geolocalyze the victim etc...)
 
 Goal of this is to :
 - perform stable worked and undetectable scripts
-- have a botnet of multiple client
+- Manage several client and create a botnet
 - executable must be light
