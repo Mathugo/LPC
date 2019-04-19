@@ -1,15 +1,7 @@
 #pragma once
-#define _WINSOCK_DEPRECATED_NO_WARNINGS 
-#define _WINSOCK_DEPCRECATED 
 #pragma warning(disable:4996) 
 #include <iostream>
-#include <winsock2.h>
-#include <WS2tcpip.h>
 #pragma comment(lib, "Ws2_32.lib")
-#define _WINSOCK_DEPRECATED_NO_WARNINGS 
-#define _WINSOCK_DEPCRECATED 
-#include <Windows.h>
-#include <stdio.h>
 #include "Client.h"
 
 int main()

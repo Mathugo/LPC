@@ -3,7 +3,7 @@
 
 
 
-void Transfer::uploadToClient(Client* client, std::string filename)
+bool Transfer::uploadToClient(Client* client, std::string filename)
 {
 
 		std::cout << "Uploading .." << std::endl;
@@ -14,7 +14,6 @@ void Transfer::uploadToClient(Client* client, std::string filename)
 		const unsigned int size = atoi(buffer);
 		std::cout << "Size : " << size << " bytes" << std::endl;
 		std::ofstream file_export(filename, std::ios::binary | std::ios::out | std::ios::trunc);
-		int nb = 0;
 
 		if (file_export)
 		{
@@ -38,17 +37,16 @@ void Transfer::uploadToClient(Client* client, std::string filename)
 					file_export.write(memblock, len);
 					current_size += len;
 				}
-				nb++;
 			}
 			file_export.close();
+			return 1;
 		}
 		else
 		{
 			client->send_b("Can't create the file : ");
 			client->send_b(filename.c_str());
+			return 0;
 		}
-
-		std::cout << "Nb : " << nb << std::endl;
 }
 
 void Transfer::screenshot(Client* client)
@@ -137,3 +135,4 @@ void Transfer::Copy(std::string filename_out, std::string filename)
 		std::cout << "DONE";
 	}
 }
+	

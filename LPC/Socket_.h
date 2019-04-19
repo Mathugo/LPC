@@ -1,9 +1,20 @@
 #pragma once
+#ifdef _WIN32
 #include <WinSock2.h>
-#include <iostream>
-#include <WS2tcpip.h>
-#include <string.h>
 #include <Windows.h>
+#include <WS2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
+#endif
+#ifdef unix
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#endif
+
+#include <iostream>
+#include <string.h>
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>

