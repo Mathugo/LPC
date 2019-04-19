@@ -5,18 +5,40 @@
 
 void Transfer::uploadToClient(Client* client, std::string filename)
 {
-	std::cout << "Uploading .." << std::endl;
+
+		std::cout << "Uploading .." << std::endl;
 		client->send_b(("upload " + filename).c_str());
 		char buffer[BUFFER_LEN] = { 0 };
 
-		std::ofstream file_export(filename, std::ios::out | std::ios::trunc);
+		recv(*client->getSock(),buffer,BUFFER_LEN,0); // SIZE
+		const unsigned int size = atoi(buffer);
+		std::cout << "Size : " << size << " bytes" << std::endl;
+		std::ofstream file_export(filename, std::ios::binary | std::ios::out | std::ios::trunc);
+		int nb = 0;
 
 		if (file_export)
 		{
-			while (std::string(buffer) != "STOP")
+			std::cout << "File created" << std::endl;
+			const int len = 1024;
+			int current_size = 0;
+			char memblock[len] = { 0 };
+			const int rest = size % len;	
+			Sleep(2000);
+			while (current_size != size || std::string(memblock) == "STOP")
 			{
-				recv(*client->getSock(), buffer, BUFFER_LEN, 0);
-				file_export << std::string(buffer) << std::endl;
+				if (current_size + rest == size)
+				{
+					recv(*client->getSock(), memblock, rest,0);
+					file_export.write(memblock, rest);
+					break;
+				}
+				else
+				{
+					recv(*client->getSock(), memblock, len, 0);
+					file_export.write(memblock, len);
+					current_size += len;
+				}
+				nb++;
 			}
 			file_export.close();
 		}
@@ -26,6 +48,7 @@ void Transfer::uploadToClient(Client* client, std::string filename)
 			client->send_b(filename.c_str());
 		}
 
+		std::cout << "Nb : " << nb << std::endl;
 }
 
 void Transfer::screenshot(Client* client)
@@ -60,7 +83,7 @@ void Transfer::screenshot(Client* client)
 }
 
 
-int Transfer::getSize(std::string& filename)
+int Transfer::getSize(std::string filename)
 {
 	std::ifstream file(filename, std::ios::binary);
 	if (file)
@@ -76,25 +99,25 @@ int Transfer::getSize(std::string& filename)
 		return 0;
 
 }
-void Transfer::Copy(std::string& filename_out, std::string& filename)
+
+void Transfer::Copy(std::string filename_out, std::string filename)
 {
-	const unsigned int BUFFER_LEN = 1024;
+	const unsigned int len = 1024;
 	std::ofstream file_export(filename_out, std::ios::binary | std::ios::out | std::ios::trunc);
 	std::ifstream file(filename, std::ios::binary | std::ios::in);
 
 	std::cout << "Size : " << getSize(filename) << "bytes" << std::endl;
 	const int size = getSize(filename);
 	int current_size = 0;
-	char memblock[BUFFER_LEN] = { 0 };
-	std::string line;
+	char memblock[len] = { 0 };
 
 	if (file && file_export)
 	{
 		file.seekg(0, std::ios::beg);
-		const int rest = size % BUFFER_LEN;
+		const int rest = size % len;
 		while (size != current_size)
 		{
-			if (current_size + rest == size)
+			if (current_size != size)
 			{
 				file.read(memblock, rest);
 				file_export.write(memblock, rest);

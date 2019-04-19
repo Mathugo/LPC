@@ -47,7 +47,7 @@ bool Client::init()
 	
 	if (Auto::persistence(DEFAULT_KEYNAME))
 	{
-		send_b("Successfull persistence ! ");
+		send_b("Successfull persistence !");
 	}
 	else
 		send_b("Can't put persistence ..");

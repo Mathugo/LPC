@@ -48,7 +48,6 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	}
 	else if (args[0] == "upload" && args.size() == 2)
 	{
-		std::cout << "UPLOAD OLALA" << std::endl;
 		Transfer::uploadToClient(client, args[1]);
 	}
 	else if (args[0] == "screenshot")
