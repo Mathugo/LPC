@@ -1,4 +1,5 @@
 # LPC
+## Le petit cheval
 Trojan written in C++ based on socket connection.
 
 2 Executables : The handler and the payload. 
