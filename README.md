@@ -23,7 +23,7 @@ First you need to install Visual Studio at least 2017 (Community or Pro)
 Then install all the C++ basics tools in Visual Installer (g++, ...)
 
 ### How to build the project 
-Before building the project, to communicate with the handler you need to put the external IP address of the machine that will be running the handler (handler repository is here : https://github.com/Mathugo/LPC_handler).
+Before building the project, to communicate with the handler you need to put the external IP address of the machine that will be running the handler [Handler](https://github.com/Mathugo/LPC_handler).
 It's located in the main function() --> [LPC.cpp](https://github.com/Mathugo/LPC/blob/master/LPC/LPC.cpp)
 ```
 int main()
