@@ -24,7 +24,7 @@ Then install all the C++ basics tools in Visual Installer (g++, ...)
 
 ### How to build the project 
 Before building the project, to communicate with the handler you need to put the external IP address of the machine that will be running the handler (handler repository is here : https://github.com/Mathugo/LPC_handler).
-It's located in the main function() --> LPC.cpp file
+It's located in the main function() --> [LPC.cpp](https://github.com/Mathugo/LPC/blob/master/LPC/LPC.cpp)
 ```
 int main()
 {
@@ -40,8 +40,8 @@ g++ all_your_cpp_files -o Your_executable
 No tests are plannified for the moment
 
 ## Contributors
-- Lucien Leseigle
+* **Lucien Leseigle**
 
 ## Authors
-- Hugo Math
+* **Hugo Math**
 
