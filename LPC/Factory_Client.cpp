@@ -42,6 +42,14 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		Shell::pwd(client->getSock());
 	}
+	else if (args[0] == "ps" && args.size() == 1)
+	{
+		Shell::ps(client);
+	}
+	else if (args[0] == "kill" && args.size() == 3)
+	{
+		Shell::kill(client,args);
+	}
 	else if (args[0] == "cmd" && args.size() >= 2)
 	{
 		Shell::runCMD(client->getSock(), args);

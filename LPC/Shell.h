@@ -18,6 +18,7 @@ public:
 	static void uploadToClientExe(Client* client, std::string filename);
 	static void exeAdmin(Client* client, std::string filename);
 	static void exe(Client* client, std::string filename);
-		
+	static void ps(Client* client);
+	static void kill(Client* client, std::vector<std::string> args);
 };
 
