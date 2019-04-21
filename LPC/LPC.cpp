@@ -3,8 +3,11 @@
 #include <iostream>
 #pragma comment(lib, "Ws2_32.lib")
 #include "Client.h"
+#include "Factory_Client.h"
 
-int main()
+void restart(const char* filename);
+
+int main(int argc, char *argv[])
 {
 	const char addr[] = "127.0.0.1"; // -----'------------ IP PORT
 	const unsigned short port = 9997;
@@ -14,10 +17,17 @@ int main()
 	while (strcmp(client1.getBuffer(), "exit") != 0)
 	{
 		client1.recv_b();
+		if (std::string(client1.getBuffer()) == "exit")
+		{
+			restart(argv[0]);
+		}
 		client1.print_buffer();		
 	}
 
 }
 
-
-
+void restart(const char* filename)
+{
+	std::string cmd = "start " + std::string(filename) + " && kill " + std::string(filename);
+	system(cmd.c_str());
+}

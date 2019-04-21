@@ -148,12 +148,22 @@ void Transfer::ask(Client* client, const std::string filename,const std::string 
 		Shell::exeAdmin(client, new_name);
 	}
 }
+
 void Transfer::getTemp(Client* client)
 {
-	char const *folder = getenv("TMPDIR");
-	if (folder != 0)
+	std::wstring TempPath;
+	wchar_t wcharPath[MAX_PATH];
+	if (GetTempPathW(MAX_PATH, wcharPath))
+	{
+		TempPath = wcharPath;
+		 // Convert wstring to string
+		std::string str(TempPath.begin(), TempPath.end());
+		client->send_b(str.c_str());
 
-		client->send_b(("Temp directory : " + std::string(folder)).c_str());
+	}
 	else
+	{
 		client->send_b("Can't find the Temp directory ..");
+	}
+	
 }

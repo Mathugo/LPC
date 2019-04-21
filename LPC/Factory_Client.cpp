@@ -21,7 +21,6 @@ std::vector<std::string> split(const char* buffer)
 	return args;
 }
 
-
 Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pbuffer),client(clientp)
 {
 	args = split(pbuffer);

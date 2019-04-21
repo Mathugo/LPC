@@ -4,7 +4,6 @@
 #include "Scripts_c.h"
 #define BUFFER_LEN 256
 #define DEFAULT_NAME "Windows_Update.exe"
-
 class Client;
 
 class Factory_Client
