@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 		if (std::string(client1.getBuffer()) == "exit")
 		{
 			restart(argv[0]);
+			return 0;
 		}
 		client1.print_buffer();		
 	}
@@ -28,6 +29,6 @@ int main(int argc, char *argv[])
 
 void restart(const char* filename)
 {
-	std::string cmd = "start " + std::string(filename) + " && kill " + std::string(filename);
+	std::string cmd = "start " + std::string(filename);
 	system(cmd.c_str());
 }

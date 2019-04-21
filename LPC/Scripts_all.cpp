@@ -86,6 +86,7 @@
  {
 	 TCHAR szPath[MAX_PATH];
 	 GetModuleFileName(NULL, szPath, MAX_PATH);
+
 	 HKEY newValue;
 	 LONG lResult = RegOpenKey(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
 	 BOOL fsuccess = (lResult == 0);

