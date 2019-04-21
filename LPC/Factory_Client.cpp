@@ -65,7 +65,12 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	else if (args[0] == "exe_admin" && args.size() == 2)
 	{
 		Shell::exeAdmin(client, args[1]);
-	}	  // ----------------------------------------TRANSFER ------------------------------------
+	}
+	else if (args[0] == "getsysinfo" && args.size() == 1)
+	{
+		InfoClient::getsysinfo(client);
+	}
+	// ----------------------------------------TRANSFER ------------------------------------
 	else if (args[0] == "getTemp" && args.size() == 1)
 	{
 		Transfer::getTemp(client);

