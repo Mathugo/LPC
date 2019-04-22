@@ -42,6 +42,10 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 		client->send_b(Auto::get_ip().c_str());
 	}
 	  // ----------------------------------- SYSTEM COMMAND -----------------------------------
+	else if (args[0] == "cd" && args.size() == 2)
+	{
+		Shell::cd(args[1]);
+	}
 	else if (args[0] == "ls" && args.size() == 1)
 	{
 		Shell::ls(client->getSock());

