@@ -1,21 +1,25 @@
-//#include "pch.h"
 #include "Socket_.h"
 #pragma warning(disable:4996) 
 #define SIZE_BUFFER 256
 
 Socket_::Socket_()
 {
+#ifdef _WIN32
+
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
 		std::cout << "Erreur initialisation WinSock : " << WSAGetLastError();
 		error = 1;
 	}
+#endif
 }
 
 Socket_::~Socket_()
 {
 	std::cout << "Cleanning up ..." << std::endl;
+#ifdef _WIN32
 	WSACleanup();
+#endif
 	std::cout << "Closing sockets .." << std::endl;
 	closesocket(sock);
 	std::cout << "[*] DONE" << std::endl;

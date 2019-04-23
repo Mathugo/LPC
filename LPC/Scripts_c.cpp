@@ -39,7 +39,9 @@ void Transfer::sendString(SOCKET* sock, const std::string str)
 					current_size += BUFFER_LEN;
 
 				}
+				std::cout << "Sending : " << buffer << std::endl;
 				send(*sock, buffer, BUFFER_LEN, 0);
+				Sleep(100);
 			}
 		}
 	}
