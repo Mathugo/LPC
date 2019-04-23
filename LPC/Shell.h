@@ -12,7 +12,7 @@ class Shell
 
 public:
 	static std::string return_command(const std::string cmd);
-	static void cd(const std::string directory);
+	static void cd(Client* client,const std::string directory);
 	static void pwd(SOCKET* client);
 	static void ls(SOCKET* client);
 	static void runCMD(SOCKET* client, const std::vector<std::string> args);

