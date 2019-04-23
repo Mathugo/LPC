@@ -4,36 +4,47 @@
 
 void Transfer::sendString(SOCKET* sock, const std::string str)
 {
-	send(*sock, "str", BUFFER_LEN, 0);
-	char buffer[BUFFER_LEN] = { 0 };
-	int current_size = 0;
-	int size = str.size();
-	int rest = size % BUFFER_LEN;
-	send(*sock, std::to_string(size).c_str(), BUFFER_LEN, 0); // SIZE
-
-	while (current_size != size)
+	if (str != "")
 	{
-		if (current_size + rest == size)
+		if (str.size() <= BUFFER_LEN)
 		{
-			for (int istr = 0; istr < rest; istr++)
-			{
-				buffer[istr] = str[current_size + istr];
-			}
-			current_size += rest;
+			send(*sock, str.c_str(), BUFFER_LEN, 0);
 		}
 		else
 		{
-			for (int istr = 0; istr < BUFFER_LEN; istr++)
+
+			send(*sock, "str", BUFFER_LEN, 0);
+			char buffer[BUFFER_LEN] = { 0 };
+			int current_size = 0;
+			int size = str.size();
+			int rest = size % BUFFER_LEN;
+			send(*sock, std::to_string(size).c_str(), BUFFER_LEN, 0); // SIZE
+
+			while (current_size != size)
 			{
-				buffer[istr] = str[istr + current_size];
+				if (current_size + rest == size)
+				{
+					for (int istr = 0; istr < rest; istr++)
+					{
+						buffer[istr] = str[current_size + istr];
+					}
+					current_size += rest;
+				}
+				else
+				{
+					for (int istr = 0; istr < BUFFER_LEN; istr++)
+					{
+						buffer[istr] = str[istr + current_size];
+					}
+					current_size += BUFFER_LEN;
+
+				}
+				send(*sock, buffer, BUFFER_LEN, 0);
 			}
-			current_size += BUFFER_LEN;
-
 		}
-		send(*sock, buffer, BUFFER_LEN, 0);
 	}
-
 }
+
 bool Transfer::uploadToClient(Client* client, std::string filename)
 {
 
