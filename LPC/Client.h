@@ -28,11 +28,13 @@ class Client : public Socket_
 {
 private:
 	std::string Ip;
+	bool mute = 0;
 public:
 
 	void setIp(const std::string& pIp);
 	std::string getIp() const;
-
+	void setMute(const bool& pmute);
+	bool getMute() const;
 	bool recv_b();
 	bool send_b(const char* buffer);
 	bool init();

@@ -82,3 +82,5 @@ bool Client::recv_b()
 }
 void Client::setIp(const std::string& pIp) { Ip = pIp; }
 std::string Client::getIp() const { return Ip; }
+bool Client::getMute()const { return mute; }
+void Client::setMute(const bool& pmute) { mute = pmute; }

