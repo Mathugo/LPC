@@ -5,7 +5,6 @@
 Socket_::Socket_()
 {
 #ifdef _WIN32
-
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
 		std::cout << "Erreur initialisation WinSock : " << WSAGetLastError();
