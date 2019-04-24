@@ -55,11 +55,17 @@ bool Transfer::uploadToClient(Client* client, std::string filename)
 		char buffer[BUFFER_LEN] = { 0 };
 
 		recv(*client->getSock(),buffer,BUFFER_LEN,0); // SIZE
+
+		if (std::string(buffer) == "STOP")
+		{
+			client->send_b("Error, aborting the upload ...");
+			return 0;
+		}
 		const unsigned int size = atoi(buffer);
 		std::cout << "Size : " << size << " bytes" << std::endl;										
 		std::ofstream file_export(filename, std::ios::binary | std::ios::out | std::ios::trunc);
 
-		if (file_export)
+		if (file_export)	
 		{
 			std::cout << "File created" << std::endl;
 			const int len = 1024;
@@ -67,7 +73,7 @@ bool Transfer::uploadToClient(Client* client, std::string filename)
 			char memblock[len] = { 0 };
 			const int rest = size % len;	
 			Sleep(2000);
-			while (current_size != size || std::string(memblock) == "STOP")
+			while (current_size != size)
 			{
 				if (current_size + rest == size)
 				{
@@ -81,12 +87,18 @@ bool Transfer::uploadToClient(Client* client, std::string filename)
 					file_export.write(memblock, len);
 					current_size += len;
 				}
+				if (std::string(buffer) == "STOP")
+				{
+					client->send_b("Error, aborting the upload ...");
+					return 0;
+				}
 			}
 			file_export.close();
 			return 1;
 		}
 		else
 		{
+			std::cout << "CANT CREATE THE FILE " << std::endl;
 			client->send_b("Can't create the file : ");
 			client->send_b(filename.c_str());
 			return 0;
