@@ -10,7 +10,7 @@ void restart(const char* filename);
 int main(int argc, char *argv[])
 {
 	const char addr[] = "127.0.0.1"; // -----'------------ IP PORT
-	const unsigned short port = 32769; // 32769
+	const unsigned short port = 9997; // 32769
 	
 	Client client1(addr, port);
 

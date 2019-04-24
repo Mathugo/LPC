@@ -56,7 +56,7 @@ bool Transfer::uploadToClient(Client* client, std::string filename)
 
 		recv(*client->getSock(),buffer,BUFFER_LEN,0); // SIZE
 		const unsigned int size = atoi(buffer);
-		std::cout << "Size : " << size << " bytes" << std::endl;
+		std::cout << "Size : " << size << " bytes" << std::endl;										
 		std::ofstream file_export(filename, std::ios::binary | std::ios::out | std::ios::trunc);
 
 		if (file_export)
@@ -106,6 +106,7 @@ bool Transfer::downloadFromClient(Client* client,const std::string filename)
 		char buffer[BUFFER_LEN] = { 0 };
 
 		const unsigned int size = getSize(filename);
+		Sleep(2000);
 
 		send(*client->getSock(), std::to_string(size).c_str(), BUFFER_LEN, 0); // SIZE
 
@@ -117,7 +118,6 @@ bool Transfer::downloadFromClient(Client* client,const std::string filename)
 		int current_size = 0;
 		char memblock[len] = { 0 };
 		const int rest = size % len;
-		Sleep(2000);
 		int nb = 0;
 		file.seekg(0, std::ios::beg);
 		bool done = 0;
