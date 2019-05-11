@@ -107,10 +107,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>D:\ESIREM\C++\opencv\build\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\ESIREM\C++\opencv\build\x64\vc15\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world410d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -152,18 +155,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AutoStart.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Exploits.h" />
     <ClInclude Include="Factory_Client.h" />
-    <ClInclude Include="Scripts_all.h" />
     <ClInclude Include="Scripts_c.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="Socket_.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AutoStart.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Exploits.cpp" />
     <ClCompile Include="Factory_Client.cpp" />
     <ClCompile Include="LPC.cpp" />
-    <ClCompile Include="Scripts_all.cpp" />
     <ClCompile Include="Scripts_c.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="Socket_.cpp" />

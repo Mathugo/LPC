@@ -10,9 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factory_Client.h" />
-    <ClInclude Include="Scripts_all.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts_c.h">
       <Filter>Scripts</Filter>
     </ClInclude>
@@ -25,11 +22,14 @@
     <ClInclude Include="Client.h">
       <Filter>Socket</Filter>
     </ClInclude>
+    <ClInclude Include="Exploits.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoStart.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Scripts_all.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts_c.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -43,6 +43,12 @@
     </ClCompile>
     <ClCompile Include="Client.cpp">
       <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Exploits.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoStart.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

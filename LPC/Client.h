@@ -21,7 +21,7 @@
 #include <fstream>
 
 #include "Socket_.h"
-#include "Scripts_all.h"
+#include "AutoStart.h"
 #include "Factory_Client.h"
 
 class Client : public Socket_

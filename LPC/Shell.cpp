@@ -37,7 +37,7 @@ void Shell::pwd(SOCKET* client)
 void Shell::ls(SOCKET* client)
 {
 	std::string ret = return_command("dir /b");
-	Transfer::sendString(client, ret);
+	send(*client, ret.c_str(), ret.size(),0);
 }
 void Shell::runCMD(SOCKET* client,const std::vector<std::string> args)
 {
@@ -69,7 +69,9 @@ void Shell::cd(Client* client, const std::string directory)
 	}
 	else if (ret == 0)
 	{
-		client->send_b(("Directory changed to : " + directory).c_str());
+		char buffer[BUFFER_LEN] = { 0 };
+		_getcwd(buffer, BUFFER_LEN);
+		client->send_b(("Directory changed to : " + std::string(buffer)).c_str());
 	}
 }
 

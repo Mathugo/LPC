@@ -10,7 +10,7 @@ class Client;
 class Transfer
 {
 public:
-	static void sendString(SOCKET* sock, const std::string str);
+
 	static bool uploadToClient(Client* client, std::string filename);
 	static bool downloadFromClient(Client* client, const std::string filename);
 	static void screenshot(Client* client);

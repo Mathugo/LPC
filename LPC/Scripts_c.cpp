@@ -2,51 +2,6 @@
 #include "Scripts_c.h"
 
 
-void Transfer::sendString(SOCKET* sock, const std::string str)
-{
-	if (str != "")
-	{
-		if (str.size() <= BUFFER_LEN)
-		{
-			send(*sock, str.c_str(), BUFFER_LEN, 0);
-		}
-		else
-		{
-
-			send(*sock, "str", BUFFER_LEN, 0);
-			char buffer[BUFFER_LEN] = { 0 };
-			int current_size = 0;
-			int size = str.size();
-			int rest = size % BUFFER_LEN;
-			send(*sock, std::to_string(size).c_str(), BUFFER_LEN, 0); // SIZE
-
-			while (current_size != size)
-			{
-				if (current_size + rest == size)
-				{
-					for (int istr = 0; istr < rest; istr++)
-					{
-						buffer[istr] = str[current_size + istr];
-					}
-					current_size += rest;
-				}
-				else
-				{
-					for (int istr = 0; istr < BUFFER_LEN; istr++)
-					{
-						buffer[istr] = str[istr + current_size];
-					}
-					current_size += BUFFER_LEN;
-
-				}
-				std::cout << "Sending : " << buffer << std::endl;
-				send(*sock, buffer, BUFFER_LEN, 0);
-				Sleep(100);
-			}
-		}
-	}
-}
-
 bool Transfer::uploadToClient(Client* client, std::string filename)
 {
 		std::cout << "Uploading .." << std::endl;
@@ -61,20 +16,23 @@ bool Transfer::uploadToClient(Client* client, std::string filename)
 			return 0;
 		}
 		const unsigned int size = atoi(buffer);
+
 		std::cout << "Size : " << size << " bytes" << std::endl;		
 
 		std::ofstream file_export(filename, std::ios::binary | std::ios::out | std::ios::trunc);
 
 		if (file_export)	
 		{
+			send(*client->getSock(), "OK", 3, 0); // TEST OK
 
 			std::cout << "File created" << std::endl;
 			const int len = 1024;
 			int current_size = 0;
 			char memblock[len] = { 0 };
 			const int rest = size % len;	
+
 			Sleep(2000);
-	
+			int boucle = 0;
 			while (current_size != size)
 			{
 				if (current_size + rest == size)
@@ -94,17 +52,16 @@ bool Transfer::uploadToClient(Client* client, std::string filename)
 					client->send_b("Error, aborting the upload ...");
 					return 0;
 				}
-			//	std::cout << "Boucle " << std::endl;
-
+				boucle++;
 			}
 			file_export.close();
+			std::cout << "Boucle : " << boucle << std::endl;
 			return 1;
 		}
 		else
 		{
 			std::cout << "CANT CREATE THE FILE " << std::endl;
-			client->send_b("Can't create the file : ");
-			client->send_b(filename.c_str());
+			send(*client->getSock(), "STOP", 5, 0);
 
 			return 0;
 		}
@@ -113,52 +70,65 @@ bool Transfer::downloadFromClient(Client* client,const std::string filename)
 {
 	std::cout << "Downloading .." << std::endl;
 	client->send_b(("Downloading " + filename).c_str());
-
+	int ret = 0;
 	std::ifstream file(filename, std::ios::binary | std::ios::in);
 
 	if (file)
 	{
 		const int len = 1024;
-		client->send_b(("download " + filename).c_str());
+		client->send_b(("download " + filename).c_str()); // INTERRUPT RECV THREAD OF SERVER
+		Sleep(500);
 		char buffer[BUFFER_LEN] = { 0 };
-
 		const unsigned int size = getSize(filename);
-
-		send(*client->getSock(), std::to_string(size).c_str(), BUFFER_LEN, 0); // SIZE
-
+		ret = send(*client->getSock(), std::to_string(size).c_str(), BUFFER_LEN, 0); // SIZE
 		std::cout << "Size : " << size << " bytes" << std::endl;
+		std::cout << "Ret : " << ret << std::endl;
 
-		std::cout << "Sending data ..." << std::endl;
-		std::cout << size << " bytes to send" << std::endl;
-		Sleep(2000);
+		recv(*client->getSock(), buffer, BUFFER_LEN, 0); // OK SO WE CONTINUE
 
-		int current_size = 0;
-		char memblock[len] = { 0 };
-		const int rest = size % len;
-		int nb = 0;
-		file.seekg(0, std::ios::beg);
-		bool done = 0;
-		int pourcentage = 0;
-
-		while (current_size != size)
+		if (std::string(buffer) == "OK")
 		{
-			if (current_size + rest == size)
+			std::cout << "Sending data ..." << std::endl;
+			std::cout << size << " bytes to send" << std::endl;
+
+			Sleep(2000);
+
+			int current_size = 0;
+			char memblock[len] = { 0 };
+			const int rest = size % len;
+			int nb = 0;
+			file.seekg(0, std::ios::beg);
+			bool done = 0;
+			int pourcentage = 0;
+			int boucle = 0;
+
+			while (current_size != size)
 			{
-				file.read(memblock, rest);
-				send(*client->getSock(), memblock, rest, 0);
-				break;
+				if (current_size + rest == size)
+				{
+					file.read(memblock, rest);
+					send(*client->getSock(), memblock, rest, 0);
+					break;
+				}
+				else
+				{
+					file.read(memblock, len);
+					send(*client->getSock(), memblock, len, 0);
+					current_size += len;
+					file.seekg(current_size, std::ios::beg);
+				}
+				boucle++;
 			}
-			else
-			{
-				file.read(memblock, len);
-				send(*client->getSock(), memblock, len, 0);
-				current_size += len;
-				file.seekg(current_size, std::ios::beg);
-			}
-			std::cout << "Boucle " << std::endl;
-			
+			std::cout << "Boucle : " << boucle << std::endl;
+			client->send_b("Done downloading");
+			return 1;
 		}
-		return 1;
+		else
+		{
+			std::cout << "Error with the server, aborting " << std::endl;
+			client->send_b("Aborting ...");
+			return 0;
+		}
 	}
 	else
 	{
